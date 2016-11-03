@@ -33,6 +33,14 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">ABOUT</a></li>
         <li><a href="#">FEATURES</a></li>
+        <%
+	    	UserService userService = UserServiceFactory.getUserService();
+	    	User user = userService.getCurrentUser();
+	    	if (user != null) {
+	      		pageContext.setAttribute("user", user);
+		%>
+      <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
+      <%} %>
       </ul>
     </div>
   </div>
@@ -40,7 +48,7 @@
 
 <body>
 
-<div class="jumbotron text-center">
+<div class="jumbotron jumbotron2 text-center">
 <h1>StudyBuddies</h1>
 <p>Studying made simple</p>
       <a href="/studybuddies"  class="btn btn-default btn-md">Sign In</a>
@@ -64,7 +72,7 @@
     <div class="col-sm-4">
       <h4>Notifications</h4>
       <p>Stay updated on study group events with text message notifications, sent using Twilio.</p>
-      <img src="homepage_images/sms.jpg" class="img-responsive" style="width:100%" alt="Image">
+      <img src="images/homepage/sms.jpg" class="img-responsive" style="width:100%" alt="Image">
     </div>
     <div class="col-sm-4">
       <h4>In Group Messaging</h4>

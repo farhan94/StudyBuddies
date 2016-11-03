@@ -25,6 +25,7 @@ public class StudyBuddiesServlet extends HttpServlet {
         	Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(id);
         	StudyBuddiesUser sbu = sbuRef.get();
         	if(sbu != null){
+        	    System.out.println("name: " +sbu.getName() +" phoneNumber: " +sbu.getPhoneNumber() + " email: " + sbu.getEmail() + " university: " +sbu.getUniversity() + " subscribed to email: " +sbu.isSubscribedToEmails() + " subscribed to texts: " +sbu.isSubscribedToSMS());
         		//redirect to just dashboard
         		//ofy().delete().entity(sbu).now();
         		resp.sendRedirect("/dashboard.jsp");
@@ -33,7 +34,7 @@ public class StudyBuddiesServlet extends HttpServlet {
         		//redirect to creating a user (Form for all info)
         		//sbu = new StudyBuddiesUser(id, user, "a","b","c", "d", false, false);
         		//ofy().save().entity(sbu).now();
-        		resp.sendRedirect("/homepage.jsp");
+        		resp.sendRedirect("/register.jsp");
         	}
         }
         
@@ -41,4 +42,38 @@ public class StudyBuddiesServlet extends HttpServlet {
             resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
         }
     }
+    
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+    	 UserService userService = UserServiceFactory.getUserService();
+	     User user = userService.getCurrentUser();
+	
+	     // We have one entity group per Guestbook with all Greetings residing
+	     // in the same entity group as the Guestbook to which they belong.
+	     // This lets us run a transactional ancestor query to retrieve all
+	     // Greetings for a given Guestbook.  However, the write rate to each
+	     // Guestbook should be limited to ~1/second.
+	    
+	     String name = req.getParameter("name");
+	     String phoneNumber = req.getParameter("phoneNumber");
+	     String university = req.getParameter("university");
+	     String[] subs = req.getParameterValues("subscription");
+	     boolean emailSub = false;
+	     boolean smsSub = false;
+	     for(int i = 0; i< subs.length; i++){
+	    	 if(subs[i].equals("emailNotification")){
+	    		 emailSub = true;
+	    	 }
+	    	 else if(subs[i].equals("textNotification")){
+	    		 smsSub = true;
+	    	 }
+	     }
+	     //Date date = new Date();
+//	     Blog blog = new Blog(user, title, content);
+	     StudyBuddiesUser sbu = new StudyBuddiesUser(user, name, phoneNumber, university, emailSub, smsSub);
+	     ofy().save().entity(sbu).now();
+	
+	     resp.sendRedirect("/dashboard.jsp");
+    }
+    
 }

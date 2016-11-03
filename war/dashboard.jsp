@@ -33,6 +33,14 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">ABOUT</a></li>
         <li><a href="#">FEATURES</a></li>
+        <%
+	    	UserService userService = UserServiceFactory.getUserService();
+	    	User user = userService.getCurrentUser();
+	    	if (user != null) {
+	      		pageContext.setAttribute("user", user);
+		%>
+      <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
+      <%} %>
       </ul>
     </div>
   </div>

@@ -1,11 +1,17 @@
-.jumbotron {
+.jumbotron2 {
     background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
      padding: 100px 25px;
      margin-bottom:0px;
      margin-top:0px;
     color: #ffffff;
 }
-
+.jumbotron3 {
+    background: linear-gradient(to left, #E55D87 , #5FC3E4);
+     padding: 50px 50px;
+     margin-bottom:0px;
+     margin-top:0px;
+    color: #ffffff;
+}
 .navbar {
      margin-bottom:0px;
      margin-top:0px;
