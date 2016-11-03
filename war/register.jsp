@@ -3,6 +3,9 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ page import="com.googlecode.objectify.ObjectifyService" %>
+<%@ page import="com.googlecode.objectify.Ref" %>
+<%@ page import="com.recursivebogosort.studybuddies.StudyBuddiesUser" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
@@ -32,23 +35,31 @@
         <li><a href="#">ABOUT</a></li>
         <li><a href="#">FEATURES</a></li>
         <%
-	    	UserService userService = UserServiceFactory.getUserService();
-	    	User user = userService.getCurrentUser();
+      	ObjectifyService.register(StudyBuddiesUser.class);
+    	UserService userService = UserServiceFactory.getUserService();
+    	User user = userService.getCurrentUser();
+    	 if (user != null) {
+         	String id = user.getUserId();
+         	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
+         	StudyBuddiesUser sbu = sbuRef.get();
+         	if(sbu != null){ %>
+         	<meta http-equiv="refresh" content="0; url=dashboard.jsp" />
+         	<% } }
+         	
+	    	//UserService userService = UserServiceFactory.getUserService();
+	    	//User user = userService.getCurrentUser();
 	    	if (user != null) {
 	      		pageContext.setAttribute("user", user);
 		%>
       <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
-      <%} %>
+      
       </ul>
     </div>
   </div>
 </nav>
 
 <body>
-   <%
-	    	if (user != null) {
-	      		pageContext.setAttribute("user", user);
-		%>
+
 <div class="jumbotron jumbotron3 text-center">
 <h2>So you want to join?</h2>
 <p>Fill out this form and we will sign you up!</p>
@@ -111,6 +122,11 @@
   </div>
 </div>
 <% } else { %>
+      </ul>
+    </div>
+  </div>
+</nav>
+<body>
 <div class="jumbotron jumbotron3 text-center">
 <h2>You need to sign in with your Google Account to see this page!</h2>
 <p>Sorry!</p>
