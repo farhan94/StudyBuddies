@@ -6,6 +6,8 @@ import com.googlecode.objectify.Ref;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import javax.servlet.http.*;
+
+import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -62,7 +64,33 @@ public class StudyBuddiesServlet extends HttpServlet {
 				//System.out.println("name: " +sbu.getName() +" phoneNumber: " +sbu.getPhoneNumber() + " email: " + sbu.getEmail() + " university: " +sbu.getUniversity() + " subscribed to email: " +sbu.isSubscribedToEmails() + " subscribed to texts: " +sbu.isSubscribedToSMS());
 				//redirect to just dashboard
 				//ofy().delete().entity(sbu).now();
-				resp.sendRedirect("/dashboard.jsp");
+				String name = req.getParameter("name");
+				if(name.equals("") || name == null){
+					name = sbu.getName();
+				}
+				String phoneNumber = req.getParameter("phoneNumber");
+				if(phoneNumber.equals("") || phoneNumber == null){
+					phoneNumber = sbu.getPhoneNumber();
+				}
+				String[] subs = req.getParameterValues("subscription");
+				boolean emailSub = false;
+				boolean smsSub = false;
+				if (subs!= null){
+				for(int i = 0; i< subs.length; i++){
+					if(subs[i].equals("emailNotification")){
+						emailSub = true;
+					}
+					else if(subs[i].equals("textNotification")){
+						smsSub = true;
+					}
+				}
+				}
+				sbu.setName(name);
+				sbu.setPhoneNumber(phoneNumber);
+				sbu.setSubscribedToEmails(emailSub);
+				sbu.setSubscribedToSMS(smsSub);
+				ofy().save().entity(sbu).now();
+				resp.sendRedirect("/settings.jsp");
 			}
 			else{
 				String name = req.getParameter("name");
