@@ -31,8 +31,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">ABOUT</a></li>
-        <li><a href="#">FEATURES</a></li>
+        <li><a href="/settings.jsp">SETTINGS</a></li>
         <%
 	    	UserService userService = UserServiceFactory.getUserService();
 	    	User user = userService.getCurrentUser();
