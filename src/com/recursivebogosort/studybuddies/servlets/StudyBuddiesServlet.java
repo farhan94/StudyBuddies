@@ -1,5 +1,6 @@
-package com.recursivebogosort.studybuddies;
+package com.recursivebogosort.studybuddies.servlets;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 
@@ -7,16 +8,18 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import javax.servlet.http.*;
 
-import com.google.appengine.api.datastore.PhoneNumber;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.recursivebogosort.studybuddies.entities.StudyBuddiesUser;
+import com.recursivebogosort.studybuddies.entities.University;
 
 
 public class StudyBuddiesServlet extends HttpServlet {
-	static {
-		ObjectifyService.register(StudyBuddiesUser.class);
-	}
+//	static {
+//		ObjectifyService.register(StudyBuddiesUser.class);
+//
+//	}
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
@@ -96,22 +99,32 @@ public class StudyBuddiesServlet extends HttpServlet {
 				String name = req.getParameter("name");
 				String phoneNumber = req.getParameter("phoneNumber");
 				String university = req.getParameter("university");
+
+				Ref<University> universityRef = ofy().load().type(University.class).filter("name", university).first();
+
+				if(universityRef == null) {
+					University u = new University(university);
+					Key<University> universityKey = ofy().save().entity(u).now();
+					universityRef = Ref.create(universityKey);
+				}
+
+
 				String[] subs = req.getParameterValues("subscription");
 				boolean emailSub = false;
 				boolean smsSub = false;
 				if (subs!= null){
-				for(int i = 0; i< subs.length; i++){
-					if(subs[i].equals("emailNotification")){
-						emailSub = true;
+					for(int i = 0; i< subs.length; i++){
+						if(subs[i].equals("emailNotification")){
+							emailSub = true;
+						}
+						else if(subs[i].equals("textNotification")){
+							smsSub = true;
+						}
 					}
-					else if(subs[i].equals("textNotification")){
-						smsSub = true;
-					}
-				}
 				}
 				//Date date = new Date();
 				//	     Blog blog = new Blog(user, title, content);
-				sbu = new StudyBuddiesUser(user, name, phoneNumber, university, emailSub, smsSub);
+				sbu = new StudyBuddiesUser(user, name, phoneNumber, university, universityRef, emailSub, smsSub);
 				ofy().save().entity(sbu).now();
 
 				resp.sendRedirect("/dashboard.jsp");

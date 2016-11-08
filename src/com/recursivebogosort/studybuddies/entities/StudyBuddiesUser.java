@@ -1,8 +1,11 @@
-package com.recursivebogosort.studybuddies;
+package com.recursivebogosort.studybuddies.entities;
 
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+
+import java.util.Collection;
 
 @Entity
 public class StudyBuddiesUser {
@@ -14,10 +17,15 @@ public class StudyBuddiesUser {
     String university;
     boolean subscribedToEmails;
     boolean subscribedToSMS;
-    //list for UserGroups
-       
+
+    Ref<University> universityRef;
+    Collection<Ref<GroupMember>> groupsJoined;
+    Collection<Ref<GroupJoinRequest>> groupsRequested;
+    Collection<Ref<GroupOwner>> MyGroups;
+
+
     private StudyBuddiesUser() {}
-    public StudyBuddiesUser(User user, String name, /*String email,*/ String phoneNumber, String university,  boolean subscribedToEmails, boolean subscribedToSMS) {
+    public StudyBuddiesUser(User user, String name, /*String email,*/ String phoneNumber, String university, Ref<University> universityRef, boolean subscribedToEmails, boolean subscribedToSMS) {
         this.id = user.getUserId();
     	this.user= user;
         this.name = name;
@@ -26,7 +34,9 @@ public class StudyBuddiesUser {
         this.university = university;
         this.subscribedToEmails = subscribedToEmails;
         this.subscribedToSMS = subscribedToSMS;
+		this.universityRef = universityRef;
     }
+
     public String getId() {
 		return id;
 	}
@@ -57,6 +67,8 @@ public class StudyBuddiesUser {
 	public void setUniversity(String university) {
 		this.university = university;
 	}
+	public Ref<University> getUniversityRef() { return this.universityRef; }
+	public void setUniversityRef(Ref<University> universityRef) { this.universityRef = universityRef; }
 	public boolean isSubscribedToEmails() {
 		return subscribedToEmails;
 	}
@@ -72,11 +84,31 @@ public class StudyBuddiesUser {
 	public User getUser() {
         return user;
     }
-    public boolean hasReqInfo(){
+	public boolean hasReqInfo(){
     	if(user == null || name == null || email == null || phoneNumber == null || university == null){
     		return false;
     	}
     	return true;
     }
+
+    public void addJoinRequest(GroupJoinRequest request) {
+        //TODO
+    }
+
+    public void joinRequestAccepted(GroupJoinRequest request, GroupMember groupJoined ) {
+        //TODO
+    }
+
+    public void joinRequestDenied(GroupJoinRequest request) {
+        //TODO
+    }
+
+    public void addMyGroup(GroupOwner myGroup) {
+        //TODO
+    }
+
+
+
+
 }
 
