@@ -44,7 +44,7 @@
                         Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
                         StudyBuddiesUser sbu = sbuRef.get();
                         if(sbu != null){ %>
-                <meta http-equiv="refresh" content="0; url=dashboard.jsp" />
+
                 <% } }
 
                     //UserService userService = UserServiceFactory.getUserService();
@@ -53,14 +53,14 @@
                         pageContext.setAttribute("user", user);
                 %>
                 <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
-
+                <% } %>
             </ul>
         </div>
     </div>
 </nav>
 
 <body>
-
+<% if(user != null ){ %>
 <div class="jumbotron jumbotron3 text-center">
     <h2>So you want to join?</h2>
     <p>Fill out this form and we will sign you up!</p>
@@ -68,7 +68,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <form class="form-horizontal" action="/GroupServlet" method="POST">
+            <form class="form-horizontal" action="/groupcreate" method="POST">
                 <fieldset>
                     <!-- Group Form -->
                     <div id="legend">
@@ -87,7 +87,7 @@
                     <div class="control-group">
                         <label class="control-label" for="max_size">Max Size</label>
                         <div class="controls">
-                            <input type="tel" id="max_size" name="max_size" required="" placeholder="" class="form-control input-lg">
+                            <input type="number" min="0" max="50" id="max_size" name="max_size" required="" placeholder="" class="form-control input-lg">
                             <p class="help-block">Choose the max size of your group. Zero will not put a limit on the group size. If you need to you can change this later.</p>
                         </div>
                     </div>
@@ -156,11 +156,6 @@
     </div>
 </div>
     <% } else { %>
-</ul>
-</div>
-</div>
-</nav>
-<body>
 <div class="jumbotron jumbotron3 text-center">
     <h2>You need to be a registered member to view this page!</h2>
     <p>Sorry!</p>

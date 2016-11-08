@@ -1,12 +1,13 @@
 package com.recursivebogosort.studybuddies.entities;
 
+import com.googlecode.objectify.annotation.EntitySubclass;
 import com.googlecode.objectify.annotation.Subclass;
 
 /**
  * Created by ryan on 11/7/16.
  */
 
-@Subclass
+@EntitySubclass
 public class GroupOwner extends GroupMember {
     //Any owner specific properties and functions
 

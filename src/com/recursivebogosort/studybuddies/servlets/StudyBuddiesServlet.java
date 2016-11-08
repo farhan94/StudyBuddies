@@ -102,7 +102,7 @@ public class StudyBuddiesServlet extends HttpServlet {
 
 				Ref<University> universityRef = ofy().load().type(University.class).filter("name", university).first();
 
-				if(universityRef == null) {
+				if(universityRef.get() == null) {
 					University u = new University(university);
 					Key<University> universityKey = ofy().save().entity(u).now();
 					universityRef = Ref.create(universityKey);
