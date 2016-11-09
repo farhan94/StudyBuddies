@@ -61,7 +61,7 @@
 
 <body>
 <% if(user != null ){ %>
-<div class="jumbotron jumbotron3 text-center">
+<div class="jumbotron groupReg text-center">
     <h2>So you want to join?</h2>
     <p>Fill out this form and we will sign you up!</p>
 </div>
@@ -109,13 +109,14 @@
 
 
                     <!-- Course Form -->
+                    <!-- University Stuff Not Needed
                     <div class="control-group">
                         <label class="control-label" for="university">University</label>
                         <div class="controls">
                             <input type="text" id="university" name="university" required="true" placeholder="" class="form-control input-lg">
                             <p class="help-block"></p>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="control-group">
                         <label class="control-label" for="course_id">Course Id</label>

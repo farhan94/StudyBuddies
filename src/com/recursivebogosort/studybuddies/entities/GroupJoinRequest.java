@@ -1,7 +1,7 @@
 package com.recursivebogosort.studybuddies.entities;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.EntitySubclass;
-import com.googlecode.objectify.annotation.Subclass;
 import com.recursivebogosort.studybuddies.entities.Group;
 import com.recursivebogosort.studybuddies.entities.GroupMember;
 import com.recursivebogosort.studybuddies.entities.StudyBuddiesUser;
@@ -16,7 +16,7 @@ public class GroupJoinRequest extends GroupMember {
 
     protected GroupJoinRequest(){ super(); }
 
-    public GroupJoinRequest(StudyBuddiesUser user, Group group) {
+    public GroupJoinRequest(Ref<StudyBuddiesUser> user, Ref<Group> group) {
         super(user, group);
 
     }

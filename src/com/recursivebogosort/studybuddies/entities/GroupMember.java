@@ -9,17 +9,17 @@ import com.googlecode.objectify.annotation.*;
 public class GroupMember {
 
 	@Id protected Long id;
-	protected Ref<StudyBuddiesUser> userRef;
-	protected Ref<Group> groupRef;
+	@Load protected Ref<StudyBuddiesUser> userRef;
+	@Load protected Ref<Group> groupRef;
 
 	//Any Member Specific Settings or properties
 
 	protected GroupMember(){}
 
-	public GroupMember(StudyBuddiesUser user, Group group)
+	public GroupMember(Ref<StudyBuddiesUser> user, Ref<Group> group)
 	{
-		this.userRef = Ref.create(Key.create(StudyBuddiesUser.class, user.getId()));
-		this.groupRef = Ref.create(Key.create(Group.class, group.groupName));
+		this.userRef = user;
+		this.groupRef = group;
 	}
 
 	public StudyBuddiesUser getUser() { return userRef.getValue(); }

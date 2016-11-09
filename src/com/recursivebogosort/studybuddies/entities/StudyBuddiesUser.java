@@ -4,8 +4,13 @@ import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Load;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 
 @Entity
 public class StudyBuddiesUser {
@@ -18,7 +23,7 @@ public class StudyBuddiesUser {
     boolean subscribedToEmails;
     boolean subscribedToSMS;
 
-    Ref<University> universityRef;
+    @Load Ref<University> universityRef;
     Collection<Ref<GroupMember>> groupsJoined;
     Collection<Ref<GroupJoinRequest>> groupsRequested;
     Collection<Ref<GroupOwner>> MyGroups;
@@ -35,6 +40,9 @@ public class StudyBuddiesUser {
         this.subscribedToEmails = subscribedToEmails;
         this.subscribedToSMS = subscribedToSMS;
 		this.universityRef = universityRef;
+		this.groupsJoined = new ArrayList<Ref<GroupMember>>();
+		this.groupsRequested = new ArrayList<Ref<GroupJoinRequest>>();
+		this.MyGroups = new ArrayList<Ref<GroupOwner>>();
     }
 
     public String getId() {
@@ -103,8 +111,31 @@ public class StudyBuddiesUser {
         //TODO
     }
 
-    public void addMyGroup(GroupOwner myGroup) {
+    public void addMyGroup(Ref<GroupOwner> myGroup) {
+    	if(MyGroups == null){
+    		MyGroups = new ArrayList<Ref<GroupOwner>>();
+    	}
+    	MyGroups.add(myGroup);
         //TODO
+    }
+    
+    public GroupMember getOneGroup(){
+    	if(MyGroups == null){
+    		return null;
+    	}
+    	ArrayList<Ref<GroupOwner>> a = (ArrayList<Ref<GroupOwner>>)MyGroups;
+    	Ref<GroupOwner> re = a.get(0);
+    	Ref<GroupOwner> g = ofy().load().ref(re);  //ALWAYS NEED TO MANUALLY LOAD WHEN GOING THROUGH THE LIST, LOAD THE REF, THEN DEREF
+    	return g.getValue();
+//    	Iterator<Ref<GroupOwner>> i = MyGroups.iterator();
+//    	System.out.println("ASDFASDFAP");
+//    	GroupMember gm = i.next().getValue();
+//    	//Group gr = gm.getGroup();
+//    	if (gm == null){
+//    		System.out.println("NULL RETURNED GETONEGROUP");
+//    		return null;
+//    	}
+//    	return gm;
     }
 
 

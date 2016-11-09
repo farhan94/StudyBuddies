@@ -5,6 +5,9 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ page import="com.googlecode.objectify.ObjectifyService" %>
+<%@ page import="com.googlecode.objectify.Ref" %>
+<%@ page import="com.recursivebogosort.studybuddies.entities.StudyBuddiesUser" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
@@ -39,7 +42,6 @@
 	      		pageContext.setAttribute("user", user);
 		%>
       <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
-      <%} %>
       </ul>
     </div>
   </div>
@@ -47,6 +49,21 @@
 
 <body>
 
+<p><%
+	ObjectifyService.register(StudyBuddiesUser.class);
+ 	String id = user.getUserId();
+ 	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
+ 	StudyBuddiesUser sbu = sbuRef.get();
+ 	if(sbu != null){
+ 		if(sbu.getOneGroup() == null){
+ 			out.println("NO GROUPS");
+ 		}
+ 		else{
+ 			out.println(sbu.getOneGroup().getGroup().getGroupName()); 
+ 		}
+ 		} }
+ 		%> </p>
+ 	
 
 </body>
 </html>

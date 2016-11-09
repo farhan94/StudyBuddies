@@ -11,7 +11,6 @@ import com.recursivebogosort.studybuddies.entities.StudyBuddiesUser;
 import com.recursivebogosort.studybuddies.entities.University;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 /**
  * Created by ryan on 11/8/16.
  */
-@WebServlet(name = "GroupCreateServlet")
 public class GroupCreateServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,7 +51,7 @@ public class GroupCreateServlet extends HttpServlet {
 
         Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(user.getUserId());
 
-        if(sbuRef == null) {
+        if(sbuRef.get() == null) {
             resp.sendRedirect("/register.jsp");
         }
 
@@ -63,7 +61,7 @@ public class GroupCreateServlet extends HttpServlet {
         //Group Fields
         String groupName = req.getParameter("group_name");
         String groupDescription = req.getParameter("group_description");
-        int maxSize = Integer.getInteger(req.getParameter("max_size"));
+        int maxSize = Integer.parseInt(req.getParameter("max_size"));
         Boolean joinByRequest = Boolean.getBoolean(req.getParameter("join_by_request"));
 
         //Course Field
@@ -73,16 +71,21 @@ public class GroupCreateServlet extends HttpServlet {
 
         Ref<Course> courseRef = ofy().load().type(Course.class).filter("universityRef", universityRef).filter("courseId", courseId).filter("courseName", courseName).first();
 
-        if(courseRef == null)
+        if(courseRef.get() == null)
         {
             Course course = new Course(courseId, courseName, professor, sbuRef.get().getUniversityRef());
+            System.out.println(course.getCourseName() + " " +course.getUniversity().getName());
             Key<Course> courseKey = ofy().save().entity(course).now();
-            courseRef = Ref.create(courseKey);
+            courseRef = ofy().load().key(courseKey);
+            Course cc = courseRef.getValue();
+            System.out.println(cc.getId());
+         //   courseRef = Ref.create(courseKey);
+           // System.out.println(courseRef.getValue().getUniversity().getName());
         }
+        
+        Group group = Group.CreateGroup(groupName, maxSize, courseRef.getValue(), joinByRequest, sbu);
 
-        Group group = Group.CreateGroup(groupName, maxSize, courseRef.get(), joinByRequest, sbu);
-
-        resp.sendRedirect("/dashboard");
+        resp.sendRedirect("/dashboard.jsp");
 
     }
 
