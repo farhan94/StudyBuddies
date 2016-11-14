@@ -1,6 +1,8 @@
 package com.recursivebogosort.studybuddies.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import com.googlecode.objectify.Key;
@@ -21,9 +23,10 @@ public class Group{
 
     @Load Ref<Course> course;
 
-	Ref<GroupOwner> ownerRef;
-	Collection<Ref<GroupMember>> members;
-    Collection<Ref<GroupJoinRequest>> joinRequest;
+    @Load Ref<GroupOwner> ownerRef;
+	ArrayList<Ref<Event>> events;
+	ArrayList<Ref<GroupMember>> members;
+    ArrayList<Ref<GroupJoinRequest>> joinRequest;
 
     private Group(){}
 
@@ -33,6 +36,8 @@ public class Group{
 		this.groupName = name;
 		this.currentSize = 0;
 		this.maxSize = maxSize;
+		this.events = new ArrayList<Ref<Event>>();
+		this.members = new ArrayList<Ref<GroupMember>>();
 	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
     }
 
@@ -48,8 +53,21 @@ public class Group{
 
     public GroupOwner getOwner() { return ownerRef.getValue(); }
     public void setOwner(Key<GroupOwner> groupOwnerKey) { ownerRef = ofy().load().key(groupOwnerKey); }
-
-
+    
+    public ArrayList<Ref<GroupMember>> getMembers() {
+    	if(members == null){
+    		this.members = new ArrayList<Ref<GroupMember>>();
+    	}
+    	
+    	return members; 
+    }
+    public void addMember(Key<GroupMember> groupMemberKey) {
+    	if(members == null){
+    		this.members = new ArrayList<Ref<GroupMember>>();
+    	}
+    	members.add(ofy().load().key(groupMemberKey)); 
+    	}
+    
     public void RequestJoin(StudyBuddiesUser user)
     {
 //        if(joinByRequest)
@@ -87,11 +105,44 @@ public class Group{
         Key<GroupOwner> groupOwnerKey = ofy().save().entity(groupOwner).now();
         user.addMyGroup(ofy().load().key(groupOwnerKey));
         group.setOwner(groupOwnerKey);
+        ofy().save().entity(group).now();
         course.addGroup(groupKey);
         ofy().save().entity(user).now();
        // ofy().save().entity(groupOwner).now();
         ofy().save().entity(course).now();
         return group;
+    }
+    
+    //ADDS EVENT TO THE GROUP
+	public void addEvent(Key<Event> eventKey) {
+    	if(events == null){
+    		this.events = new ArrayList<Ref<Event>>();
+    	}
+    	Ref<Event> eventRef = ofy().load().key(eventKey);
+		events.add(eventRef);
+		this.addEventToGroupMembers(eventRef);
+		// TODO Auto-generated method stub
+		
+	}
+	
+	//THE FOLLOWING METHOD ADDS AN EVENTREF TO A STUDYBUDDIES USER
+    public void addEventToGroupMembers(Ref<Event> eventRef){
+    	if(members == null){
+    		members = new ArrayList<Ref<GroupMember>>();
+    	}
+    	Iterator i = members.iterator();
+    	while(i.hasNext()){
+    		Ref<GroupMember> memberRef = (Ref<GroupMember>) i.next();
+    		GroupMember member = ofy().load().ref(memberRef).get();
+    		//member.getUser().addEvent(eventRef);
+    		StudyBuddiesUser sbum = member.getUser();
+    		sbum.addEvent(eventRef);
+    		ofy().save().entity(sbum).now();
+    	}
+    	StudyBuddiesUser sbuo = ownerRef.get().getUser();
+    	sbuo.addEvent(eventRef);
+    	ofy().save().entity(sbuo).now();
+    	//iterate through every group member and owner and add the event to their event list
     }
 
 }

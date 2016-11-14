@@ -24,10 +24,10 @@ public class StudyBuddiesUser {
     boolean subscribedToSMS;
 
     @Load Ref<University> universityRef;
-    Collection<Ref<GroupMember>> groupsJoined;
-    Collection<Ref<GroupJoinRequest>> groupsRequested;
-    Collection<Ref<GroupOwner>> MyGroups;
-
+    ArrayList<Ref<GroupMember>> groupsJoined;
+    ArrayList<Ref<GroupJoinRequest>> groupsRequested;
+    ArrayList<Ref<GroupOwner>> MyGroups;
+    ArrayList<Ref<Event>> upcomingEvents;
 
     private StudyBuddiesUser() {}
     public StudyBuddiesUser(User user, String name, /*String email,*/ String phoneNumber, String university, Ref<University> universityRef, boolean subscribedToEmails, boolean subscribedToSMS) {
@@ -43,6 +43,7 @@ public class StudyBuddiesUser {
 		this.groupsJoined = new ArrayList<Ref<GroupMember>>();
 		this.groupsRequested = new ArrayList<Ref<GroupJoinRequest>>();
 		this.MyGroups = new ArrayList<Ref<GroupOwner>>();
+		this.upcomingEvents = new ArrayList<Ref<Event>>();
     }
 
     public String getId() {
@@ -117,6 +118,25 @@ public class StudyBuddiesUser {
     	}
     	MyGroups.add(myGroup);
         //TODO
+    }
+    public ArrayList<Ref<GroupOwner>> getMyGroups(){
+    	return this.MyGroups;
+    }
+    public void addEvent(Ref<Event> event){
+    	if(upcomingEvents == null){
+    		upcomingEvents = new ArrayList<Ref<Event>>();
+    	}
+    	upcomingEvents.add(event);
+    }
+    public ArrayList<Ref<Event>> getEvents(){
+    	return this.upcomingEvents;
+    }
+    public void joinGroup(Ref<GroupMember> groupToJoin){
+    	if(groupsJoined == null){
+    		groupsJoined = new ArrayList<Ref<GroupMember>>();
+    	}
+    	groupsJoined.add(groupToJoin);
+    	//add events to event list;
     }
     
     public GroupMember getOneGroup(){

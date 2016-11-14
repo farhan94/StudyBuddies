@@ -22,6 +22,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>GroupServlet</servlet-name>
 			<url-pattern>/groupcreate</url-pattern>
 		</servlet-mapping>
+				<servlet>
+			<servlet-name>EventServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.EventCreateServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>EventServlet</servlet-name>
+			<url-pattern>/eventcreate</url-pattern>
+		</servlet-mapping>
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->

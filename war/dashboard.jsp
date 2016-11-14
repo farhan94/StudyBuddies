@@ -7,7 +7,9 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
 <%@ page import="com.googlecode.objectify.Ref" %>
-<%@ page import="com.recursivebogosort.studybuddies.entities.StudyBuddiesUser" %>
+<%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.recursivebogosort.studybuddies.entities.*" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
@@ -49,7 +51,10 @@
 
 <body>
 
-<p><%
+<p>
+<a href="/groupcreate.jsp" class="btn btn-danger"> Create Group</a>
+<a href="/eventcreate.jsp" class="btn btn-danger"> Create Event</a>
+<%
 	ObjectifyService.register(StudyBuddiesUser.class);
  	String id = user.getUserId();
  	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
@@ -61,7 +66,20 @@
  		else{
  			out.println(sbu.getOneGroup().getGroup().getGroupName()); 
  		}
- 		} }
+ 		
+ 		ArrayList<Ref<Event>> it = sbu.getEvents();
+ 		if(it != null){
+ 		Iterator i = it.iterator();
+ 		while(i.hasNext()){
+			Ref<Event> one = (Ref<Event>)i.next();
+			one = ObjectifyService.ofy().load().ref(one);
+			Event go = one.get();
+			out.println(go.getEventName());
+ 		}
+ 		}
+ 		
+ 		
+	 } }
  		%> </p>
  	
 

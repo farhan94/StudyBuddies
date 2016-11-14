@@ -147,7 +147,7 @@
                         <!-- Button -->
                         <div class="controls">
                             <button type="submit" class="btn btn-success">Create Group</button>
-                            <a href="/dashboard" class="btn btn-danger"> Cancel</a>
+                            <a href="/dashboard.jsp" class="btn btn-danger"> Cancel</a>
                         </div>
                     </div>
                 </fieldset>
