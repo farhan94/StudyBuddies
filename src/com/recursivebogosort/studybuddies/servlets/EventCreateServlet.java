@@ -81,7 +81,7 @@ public class EventCreateServlet extends HttpServlet {
         	return;
         }
         
-        Event event = Event.createEvent(eventName, eventDescription, groupRef.get(), date2);
+        Event event = Event.createEvent(eventName, eventDescription, groupRef.get(), date);
         resp.sendRedirect("/dashboard.jsp");
 
     }

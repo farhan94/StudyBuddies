@@ -24,35 +24,55 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/homestyle.css" />
 </head>
 <nav class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">StudyBuddies</a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">ABOUT</a></li>
-                <li><a href="#">FEATURES</a></li>
-                <%
-                    ObjectifyService.register(StudyBuddiesUser.class);
-                    UserService userService = UserServiceFactory.getUserService();
-                    User user = userService.getCurrentUser();
-                   
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#myNavbar">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+				<%
+					ObjectifyService.register(StudyBuddiesUser.class);
+					UserService userService = UserServiceFactory.getUserService();
+					User user = userService.getCurrentUser();
+					if (user != null) {
+						String id = user.getUserId();
+						Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
+						StudyBuddiesUser sbu = sbuRef.get();
+						if (sbu != null) {
+				%>
 
-                    //UserService userService = UserServiceFactory.getUserService();
-                    //User user = userService.getCurrentUser();
-                    if (user != null) {
-                        pageContext.setAttribute("user", user);
-                %>
-                <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
-                <% } %>
-            </ul>
-        </div>
-    </div>
+				<%
+					}
+					}
+
+					//UserService userService = UserServiceFactory.getUserService();
+					//User user = userService.getCurrentUser();
+					if (user != null) {
+						pageContext.setAttribute("user", user);
+				%>
+				<a class="navbar-brand" href="/dashboard.jsp">StudyBuddies</a>
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a
+					href='<%=userService.createLogoutURL("/homepage.jsp")%>'><span
+						class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
+				<%
+					} else {
+				%>
+				<a class="navbar-brand" href="/homepage.jsp">StudyBuddies</a>
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav navbar-right">
+				<%
+					}
+				%>
+			</ul>
+		</div>
+	</div>
 </nav>
 
 <body>
@@ -62,9 +82,15 @@
          StudyBuddiesUser sbu = sbuRef.get();
          if(sbu != null){ 
 
-
+			if(sbu.getAllGroups() == null){
 
 %>
+<div class="jumbotron groupReg text-center">
+    <h2>Create an Event For a Study Group!</h2>
+    <p>Fill out this form to create an event!</p>
+</div>
+<div class="alert alert-danger text-center" role="alert">You need to own a group before you can create events!</div>
+<%} else{ %>
 <div class="jumbotron groupReg text-center">
     <h2>Create an Event For a Study Group!</h2>
     <p>Fill out this form to create an event!</p>
@@ -135,7 +161,7 @@
     </div>
 </div>
 
-    <% } } else { %>
+    <% } } } else { %>
 <div class="jumbotron jumbotron3 text-center">
     <h2>You need to be a registered member to view this page!</h2>
     <p>Sorry!</p>

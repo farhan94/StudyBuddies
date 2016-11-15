@@ -139,6 +139,40 @@ public class StudyBuddiesUser {
     	//add events to event list;
     }
     
+    public ArrayList<Ref<GroupMember>> getAllGroups(){
+    	if(groupsJoined == null && MyGroups == null){
+    		return null;
+    	}
+    	else{
+    		ArrayList<Ref<GroupMember>> result = new ArrayList<Ref<GroupMember>>();
+    		if(MyGroups == null){
+        		return this.groupsJoined;
+        	}
+    		else if (groupsJoined == null){
+    			Iterator i = this.MyGroups.iterator();
+    			while(i.hasNext()){
+    				Ref<GroupMember> m  = (Ref<GroupMember>) i.next();
+    				result.add(m);
+    			}
+    			return result;
+    		}
+    		else{
+    			Iterator i = this.MyGroups.iterator();
+    			while(i.hasNext()){
+    				Ref<GroupMember> m  = (Ref<GroupMember>) i.next();
+    				result.add(m);
+    			}
+    			i = this.groupsJoined.iterator();
+    			while(i.hasNext()){
+    				Ref<GroupMember> m  = (Ref<GroupMember>) i.next();
+    				result.add(m);
+    			}
+    			return result;
+    		}
+    	}
+    	
+    }
+    
     public GroupMember getOneGroup(){
     	if(MyGroups == null){
     		return null;

@@ -60,11 +60,20 @@
  	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
  	StudyBuddiesUser sbu = sbuRef.get();
  	if(sbu != null){
- 		if(sbu.getOneGroup() == null){
+ 		ArrayList<Ref<GroupMember>> g = sbu.getAllGroups();
+ 		if(g == null){
  			out.println("NO GROUPS");
  		}
  		else{
- 			out.println(sbu.getOneGroup().getGroup().getGroupName()); 
+ 			Iterator iter = g.iterator();
+ 			while(iter.hasNext()){
+ 				Ref<GroupMember> gmemberRef = (Ref<GroupMember>)iter.next();
+ 				gmemberRef = ObjectifyService.ofy().load().ref(gmemberRef);
+ 				GroupMember gmember = gmemberRef.get();
+ 				Group grp = gmember.getGroup();
+ 				out.println(grp.getGroupName());
+ 	 		}
+ 			 
  		}
  		
  		ArrayList<Ref<Event>> it = sbu.getEvents();

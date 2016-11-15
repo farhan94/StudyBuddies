@@ -18,16 +18,16 @@ public class Event {
     String eventDiscription;
     // int currentSize;            // Current number of members not including the owner
 	// int maxSize;                // Max number of members not including the owner
-    Date date;
+    String date;
 	@Load Ref<Group> group;
 	
 	 private Event(){}
 
-		private Event(String name, String description, Group group, Date date) {
+		private Event(String name, String description, Group group, String date) {
 			super();
 			this.eventName = name;
 			this.eventDiscription = description;
-			this.date = date;
+			this.date = date; //yyyy -mm -dd
 			// this.eventSize = 0;
 			// this.maxSize = maxSize;
 		//	this.course = Ref.create(Key.create(Course.class, course.getId()));
@@ -44,7 +44,7 @@ public class Event {
 
 
 
-	    public static Event createEvent(String name, String description, Group group, Date date)
+	    public static Event createEvent(String name, String description, Group group, String date)
 	    {
 	        Event event = new Event(name, description, group, date);
 	        //event.addAllGroupMembersToEvent();
