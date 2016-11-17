@@ -15,7 +15,7 @@ import com.googlecode.objectify.annotation.Load;
 public class Group{
 	@Id Long id;
     String groupName;
-    String groupDiscription;
+    String groupDescription = "";
     int currentSize;            // Current number of members not including the owner
 	int maxSize;                // Max number of members not including the owner
     Boolean joinByRequest;      // open to all members to join or needs request
@@ -40,7 +40,9 @@ public class Group{
 	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
     }
 
-
+	public String getGroupDescription(){
+		return this.groupDescription;
+	}
 	public Long getId(){ return id;}
 
     public String getGroupName() { return groupName; }
@@ -90,7 +92,9 @@ public class Group{
 //        ofy().delete().entity(req);
     }
 
-
+    public Collection<Ref<Event>> getEventRefs(){
+    	return this.events;
+    }
     public void DenyJoinRequest(GroupJoinRequest req)
     {
         //TODO
