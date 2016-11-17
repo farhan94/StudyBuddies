@@ -8,10 +8,12 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -21,17 +23,24 @@ public class Course {
     String courseId;
     String courseName;
     String professor;
+    @Index
+    String universityName;
+    @Index
+    String departmentName;
+
     @Load Ref<University> universityRef;
-    Collection<Ref<Group>> groups;
+    @Load Ref<Department> departmentRef;
+    ArrayList<Ref<Group>> groups;
 
     private Course() { }
 
-    public Course(String courseId, String courseName, String professor, Ref<University> universityRef) {
+    public Course(String courseId, String courseName, String professor, Ref<University> universityRef, Ref<Department> departmentRef) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.professor = professor;
         this.universityRef = universityRef;
-        this.groups = new HashSet<Ref<Group>>();
+        this.departmentRef = departmentRef;
+        this.groups = new ArrayList<Ref<Group>>();
     }
 
     public Long getId() { return id; }
@@ -59,5 +68,9 @@ public class Course {
         //Ref<Group> groupRef = Ref.create(groupKey);
         groups.add(groupRef);
         return groupRef.getValue();
+    }
+
+    public Collection<Group> get_courses(){
+        return ofy().load().refs(groups).values();
     }
 }

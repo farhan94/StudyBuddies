@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="StudyBuddies:war exploded">
+    <output-path>$PROJECT_DIR$/classes/artifacts/StudyBuddies_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="StudyBuddies/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="StudyBuddies" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="com.google.appengine:appengine-api-1.0-sdk:Release" />
+          <element id="library" level="project" name="com.googlecode.objectify:objectify:Release" />
+          <element id="library" level="project" name="javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="javax.servlet:jstl:Release" />
+          <element id="library" level="module" name="objectify-4.0b1.jar" module-name="StudyBuddies" />
+          <element id="library" level="project" name="Arquillian JUnit:Release" />
+          <element id="library" level="project" name="Drools-6.2.0" />
+          <element id="library" level="project" name="Arquillian TestNG:Release" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

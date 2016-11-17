@@ -18,7 +18,6 @@ public class Group{
     String groupDiscription;
     int currentSize;            // Current number of members not including the owner
 	int maxSize;                // Max number of members not including the owner
-
     Boolean joinByRequest;      // open to all members to join or needs request
 
     @Load Ref<Course> course;
