@@ -31,14 +31,12 @@ public class Course {
 
     private Course() { }
 
-    public Course(String courseId, String courseName, String professor, Ref<University> universityRef, Ref<Department> departmentRef) {
+    public Course(String courseId, String courseName, String professor, String universityName, String departmentName) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.professor = professor;
-        this.universityRef = universityRef;
-
-        this.departmentRef = departmentRef;
-        this.groups = new ArrayList<Ref<Group>>();
+        this.universityName = universityName;
+        this.departmentName = departmentName;
     }
 
     public Long getId() { return id; }
