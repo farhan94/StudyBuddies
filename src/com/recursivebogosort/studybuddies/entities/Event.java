@@ -16,18 +16,19 @@ public class Event {
 	@Id Long id;
     String eventName;
     String eventDiscription;
+    String eventLocation;
     // int currentSize;            // Current number of members not including the owner
 	// int maxSize;                // Max number of members not including the owner
     String date;
-    String location;
-    
+
 	@Load Ref<Group> group;
 	
 	 private Event(){}
 
-		private Event(String name, String description, Group group, String date) {
+		private Event(String name, String location, String description, Group group, String date) {
 			super();
 			this.eventName = name;
+			this.eventLocation = location;
 			this.eventDiscription = description;
 			this.date = date; //yyyy -mm -dd
 			// this.eventSize = 0;
@@ -40,15 +41,23 @@ public class Event {
 
 	    public String getEventName() { return eventName; }
 	    public void setEventName(String name) { eventName = name; }
-
+	    public String getEventDescription(){
+	    	return this.eventDiscription;
+	    }
+	    public String getEventLocation(){
+	    	return this.eventLocation;
+	    }
+	    public String getDate(){
+	    	return this.date;
+	    }
 //	    public GroupOwner getOwner() { return ownerRef.getValue(); }
 //	    public void setOwner(Key<GroupOwner> groupOwnerKey) { ownerRef = ofy().load().key(groupOwnerKey); }
 
 
 
-	    public static Event createEvent(String name, String description, Group group, String date)
+	    public static Event createEvent(String name, String location, String description, Group group, String date)
 	    {
-	        Event event = new Event(name, description, group, date);
+	        Event event = new Event(name, location, description, group, date);
 	        //event.addAllGroupMembersToEvent();
 	        Key<Event> eventKey = ofy().save().entity(event).now();
 	        group.addEvent(eventKey);

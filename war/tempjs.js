@@ -190,7 +190,7 @@ function loadEvents(uid){
   }
   showElement('group_event_list');
   for(var event_item in event_list){
-      var event_id = event_list[event_item].id;
+      var event_id = event_list[event_item].uid;
       var event_name = event_list[event_item].name;
       var event_description = event_list[event_item].description;
       //var group_icon_url = event_list[group].creator;

@@ -31,12 +31,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<url-pattern>/eventcreate</url-pattern>
 		</servlet-mapping>
 		<servlet>
-			<servlet-name>GetInfoServlet</servlet-name>
-			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetInfoServlet</servlet-class>
+			<servlet-name>GetEventsServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetEventsServlet</servlet-class>
 		</servlet>
 		<servlet-mapping>
-			<servlet-name>GetInfoServlet</servlet-name>
-			<url-pattern>/getinfo</url-pattern>
+			<servlet-name>GetEventsServlet</servlet-name>
+			<url-pattern>/getevents</url-pattern>
 		</servlet-mapping>
 		<servlet>
 			<servlet-name>GetGroupServlet</servlet-name>

@@ -50,7 +50,7 @@ public class EventCreateServlet extends HttpServlet {
         }
 
         Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(user.getUserId());
-
+        
         if(sbuRef.get() == null) {
             resp.sendRedirect("/register.jsp");
         }
@@ -61,6 +61,7 @@ public class EventCreateServlet extends HttpServlet {
         //Group Fields
         String eventName = req.getParameter("event_name");
         String eventDescription = req.getParameter("event_description");
+        String eventLocation = req.getParameter("event_location");
         String groupID = req.getParameter("group");
         String date = req.getParameter("date");
         Date date2 = null;
@@ -81,7 +82,7 @@ public class EventCreateServlet extends HttpServlet {
         	return;
         }
         
-        Event event = Event.createEvent(eventName, eventDescription, groupRef.get(), date);
+        Event event = Event.createEvent(eventName, eventLocation, eventDescription, groupRef.get(), date);
         resp.sendRedirect("/dashboard.jsp");
 
     }

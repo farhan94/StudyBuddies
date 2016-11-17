@@ -93,7 +93,9 @@ public class Group{
 //        ofy().delete().entity(req);
     }
 
-
+    public Collection<Ref<Event>> getEventRefs(){
+    	return this.events;
+    }
     public void DenyJoinRequest(GroupJoinRequest req)
     {
         //TODO

@@ -113,7 +113,13 @@
                             <p class="help-block">You event name can be whatever you'd like it to be</p>
                         </div>
                     </div>
-
+					 <div class="control-group">
+                        <label class="control-label" for="event_location">Event Location</label>
+                        <div class="controls">
+                            <input type="text" id="event_location" name="event_location" required="true" placeholder="" class="form-control input-lg">
+                            <p class="help-block">Where will this event be held?</p>
+                        </div>
+                    </div>
                     <div class="control-group">
                         <label class="control-label" for="event_description">Event Description</label>
                         <div class="controls">
