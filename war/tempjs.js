@@ -11,9 +11,9 @@ function hideAll(){
   showElement("background");
 }
 
-function findGroups(){
+function findGroups(University){
   hideAll();
-  showElement('departments');
+  loadDepartments(University);
 }
 
 function updateScroll(){
@@ -69,7 +69,7 @@ function loadDepartments(university){
     }
     showElement('departments');
     for(var dept in dept_list){
-        var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept] + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept] + "</a></li>"
+        var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept].department_name + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept] + "</a></li>"
         $('#departments #nav-mobile').append(dept_line);
     }
 }
@@ -82,7 +82,7 @@ function loadCourses(department){
   }
   showElement('courses');
   for(var course in course_list){
-      var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups," + course_list[course] + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
+      var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups," + course_list[course].course_name + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
       $('#courses #nav-mobile').append(course_line);
   }
 }
