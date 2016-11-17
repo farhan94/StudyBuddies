@@ -51,6 +51,8 @@ public class Course {
             ofy().save().entity(department).now();
             this.departmentRef = ofy().load().entity(department);
         }
+        
+        this.groups = new ArrayList<Ref<Group>>();
 
     }
 

@@ -30,8 +30,8 @@ public class GetDepartmentsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String cIDString = req.getParameter("universityID");
-        long cID = Long.parseLong(cIDString);
+        String cID = req.getParameter("universityID");
+        
         University university = ofy().load().type(University.class).id(cID).getValue();
         Collection<Course> courses = university.get_courses();
         Object[] c = courses.toArray();
@@ -43,8 +43,8 @@ public class GetDepartmentsServlet extends HttpServlet {
                 jo.put("uid", crs.getId().toString());
                 jo.put("course_name", crs.getCourseName());
                 jo.put("prof_name", crs.getProfessor());
-                jo.put("uni_name", crs.getUniversity());
-                jo.put("course_id", crs.getUniversity());
+                jo.put("uni_name", crs.getUniversity().getName());
+                jo.put("course_id", crs.getCourseId());
                 //jo.put("size", grp.getCurrentSize());
                 //jo.put("purpose", grp.getGroupDescription());
                 //jo.put("isMember", true);

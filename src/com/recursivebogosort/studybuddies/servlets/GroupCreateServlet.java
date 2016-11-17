@@ -69,7 +69,7 @@ public class GroupCreateServlet extends HttpServlet {
         String courseId = req.getParameter("course_id");
         String courseName = req.getParameter("course_name");
         String professor = req.getParameter("professor");
-        String universityName = req.getParameter("university_name");
+        String universityName = universityRef.getValue().getName();
         String departmentName = req.getParameter("department_name");
         Ref<Course> courseRef = ofy().load().type(Course.class).filter("courseId ==", courseId).first();
         Ref<Department> deptRef = ofy().load().type(Department.class).filter("departmentName ==", departmentName).first();
