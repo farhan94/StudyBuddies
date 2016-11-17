@@ -1,14 +1,14 @@
 
 TEST_MODE = false;
 
-document.r
 
-var element_list = ["group_info", "messaging","all_your_groups","departments","courses","groups"];
+var element_list = ["group_info", "messaging","global_notification_list","global_event_list","your_groups","departments","courses","groups","group_notification_list","group_event_list"];
 
 function hideAll(){
   for (var element in element_list){
     hideElement(element_list[element]);
   }
+  showElement("background");
 }
 
 function findGroups(){
@@ -21,12 +21,12 @@ function updateScroll(){
     element.scrollTop = element.scrollHeight;
 }
 
-function allGroups(){
-  if(document.getElementById('all_your_groups').style.display == 'flex'){
-    hideElement('all_your_groups');
+function yourGroups(){
+  if(document.getElementById('your_groups').style.display == 'flex'){
+    hideElement('your_groups');
   }else{
     hideAll();
-    showElement('all_your_groups');
+    loadGroups('your_groups', null);
   }
 }
 
@@ -46,26 +46,18 @@ function toggleElement(element){
   }
 }
 
-function submitMessage(){
-  var Message = $('#message_input #icon_prefix')[0].value;
-  addMessage(Message);
-  $('#message_input #icon_prefix')[0].value = "";
-}
+///////////////////////////////////
 
-function addMessage(message_text){
+//NOTE: Load Functions
 
-  var message_line = "<li class=\"message-right\"><div class=\"card blue-grey lighten-2 message text-right\">";
-  message_line += "<div class=\"card-content white-text\"><p>" + message_text;
-  message_line += "</p></div></div></li>";
-  $('#messaging ul').append(message_line);
-  updateScroll();
-}
+///////////////////////////////////
 
 function loadMessages(group){
   for(var i = 2; i < element_list.length; i++){
     hideElement(element_list[i]);
   }
-  showElement("messaging");
+  hideElement("background");
+  showElement("messaging"); //TODO: change this to update from groupID
   updateScroll();
 }
 
@@ -90,45 +82,133 @@ function loadCourses(department){
   }
   showElement('courses');
   for(var course in course_list){
-      var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'" + course_list[course] + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
+      var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups," + course_list[course] + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
       $('#courses #nav-mobile').append(course_line);
   }
 }
 
-function loadGroups(course){
-	  //do some logic to get list of groups for given course
-		
-		var settings = {
-				  "async": true,
-				  "crossDomain": true,
-				  "url": "/getgroupbycourse?courseID=" + course,
-				  "method": "GET",
-				  "headers": {
-				    "cache-control": "no-cache",
-				    "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
-				  }
-				}
+function loadGroups(groups_type, course){
+  var group_list;
+  if(TEST_MODE){ group_list = dummy_group_list; }
+  showElement(groups_type);
+  if(course != null){
+    var getCourseGroups = {
+          "async": true,
+          "crossDomain": true,
+          "url": "/getgroupbycourse?courseID=" + course,
+          "method": "GET",
+          "headers": {
+            "cache-control": "no-cache",
+            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+          }
+        }
+    $.ajax(getCourseGroups).done(function (response) {
+      group_list = response;
+    });
+  }else{
+    //TODO: get groups for user
+  }
+  for(var group in group_list){
+      addGroup(groups_type, group);
+  }
+}
 
-		$.ajax(settings).done(function (response) {
-			var group_list = response;
-			  showElement('groups');
-			  for(var group in group_list){
-			      var group_uid = group_list[group].uid;
-			      var group_icon_url = group_list[group].icon_url;
-			      var group_name = group_list[group].name;
-			      var group_size = group_list[group].size;
-			      var group_purpose = group_list[group].purpose;
-			      var group_join_leave = group_list[group].is_member ? 'Leave' : 'Join';
-			      var group_line = "<li onClick=\"showGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
-			      group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
-			      group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
-			      group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div>";
-			      group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
-			      $('#groups #nav-mobile #collection').append(group_line);
-			  }
-		});
-		  
-	}
+function loadNotifications(notification_type, uid){
+  var notifications_list;
+  if(TEST_MODE){
+    notifications_list = dummy_notifications_list;
+  }
+  else if(notification_type == "global_notification_list"){
+    //do some logic to get list of all events
+  }else{
+    //do some logic to get list of events for given group
+  }
+  showElement(notification_type);
+  for(var notification in notifications_list){
+      //TODO: eventually
+  }
+}
+
+function loadEvents(event_type, uid){
+  var event_list;
+  if(TEST_MODE){
+    event_list = dummy_event_list;
+  }
+  else if(event_type == "global_event_list"){
+    //do some logic to get list of all events
+  }else{
+    //do some logic to get list of events for given group
+  }
+  showElement(event_type);
+  for(var event_item in event_list){
+      addEvent(event_type, event_item);
+  }
+}
+
+///////////////////////////////////
+
+//NOTE: Add Single Item Functions
+
+///////////////////////////////////
+
+function submitMessage(){
+  var message = {};
+  message.text = $('#message_input #icon_prefix')[0].value;
+  if(message.text == "") {return;}
+  if(addMessage(message)){
+    $('#message_input #icon_prefix')[0].value = "";
+  }else{
+    //TODO: Message did not send
+  }
+}
+
+function addMessage(message){
+  var color = isAuthor(message) ? "teal" : "blue-grey"
+  var message_line = "<li class=\"message-right\"><div class=\"card " + color + " lighten-3 message text-right\">";
+  message_line += "<div class=\"card-content white-text\"><p>" + message.text;
+  message_line += "</p></div></div></li>";
+  $('#messaging ul').append(message_line);
+  updateScroll();
+  return true;
+}
+
+function addGroup(groups_type, group){
+  //do some logic to get list of groups for given course
+    var group_uid = group_list[group].uid;
+    var group_icon_url = group_list[group].icon_url;
+    var group_name = group_list[group].name;
+    var group_size = group_list[group].size;
+    var group_purpose = group_list[group].purpose;
+    var group_join_leave = group_list[group].is_member ? 'Leave' : 'Join';
+    var group_line = "<li onClick=\"showGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
+    group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
+    group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
+    group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div>";
+    group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
+    $('#' + groups_type + ' #nav-mobile #collection').append(group_line);
+}
+
+function addEvent(event_type, event_item){
+  var event_id = event_item.uid;
+  var event_name = event_item.name;
+  var event_description = event_item.description;
+  //var group_icon_url = event_list[group].creator;
+  var event_date = event_item.date;
+  var event_time= event_item.time;
+  var event_location = event_item.location;
+  //var group_purpose = event_list[group].duration;
+
+  var event_line = "<li><div class=\"card teal darken-2\" style=\"margin: 5px; line-height:initial;\">";
+  event_line += "<div class=\"card-content white-text\"><span class=\"card-subtitle\">";
+  event_line += event_name + "</p><p><b>Time: </b>";
+  event_line += event_date + "at" + event_time + "</br><b>Duration: </b>";
+  event_line += "3 hours" + "</br><b>Location: </b>";
+  event_line += event_location + "</p></div><div class=\"card-action\"><a onClick=\"\" >";
+  event_line += "Leave" + "</a></div></div></li>"
+  //$('#group_event_list #nav-mobile').append(event_line);
+  $('#' + event_type + ' #nav-mobile').append(event_line);
+}
+
 
 
 function loadGroupInfo(uid){
@@ -139,7 +219,7 @@ function loadGroupInfo(uid){
   }
   var group_icon_url = group.icon_url;
   var group_name = group.name;
-  var group_join_leave = group.is_member;
+  var isMember = group.is_member;
   var group_purpose = group.purpose;
   var group_new_notifications = 4;
   var group_new_messages = 3;
@@ -149,69 +229,70 @@ function loadGroupInfo(uid){
   $('#group_info #nav-mobile #name')[0].textContent = group_name;
   $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
   $('#group_info #nav-mobile #joinleavebtn')[0].remove();
-  if(!group_join_leave){
+  if(!isMember){
     $('#group_info #nav-mobile #notifications')[0].style.display = "none";
     $('#group_info #nav-mobile #messages')[0].style.display = "none";
     $('#group_info #nav-mobile #events')[0].style.display = "none";
     $('#group_info #nav-mobile #settings')[0].style.display = "none";
-    var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect waves-light btn\">Join Group</a></li>";
-    $('#group_info #nav-mobile').append(btn);
   }else{
-    $('#group_info #nav-mobile #notifications')[0].style.display = "flex";
+    $('#group_info #nav-mobile')[0].style.display = "flex";
     $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
-    $('#group_info #nav-mobile #messages')[0].style.display = "flex";
+    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + uid + ")");
     $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
-    $('#group_info #nav-mobile #events')[0].style.display = "flex";
     $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
-    $('#group_info #nav-mobile #settings')[0].style.display = "flex";
-    var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect waves-light btn\">Leave Group</a></li>";
-    $('#group_info #nav-mobile').append(btn);
+    $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + uid + ")");
   }
+  var color = isMember ? "red" : "";
+  var join_or_leave = isMember ? "Leave" : "Join";
 
+  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
+  $('#group_info #nav-mobile').append(btn);
 }
 
-function loadNotifications(uid){
-  //do some logic to get list of notifications for given group
-  var notifications_list;
-  if(TEST_MODE){
-    //TODO: notifications_list = dummy_notifications_list;
-  }
-  showElement('group_notification_list');
-  for(var notification in notifications_list){
-      //TODO: eventually
-  }
+///////////////////////////////////
+
+//NOTE: Helper Functions
+
+///////////////////////////////////
+
+
+
+function isAuthor(message){
+  return true;
 }
 
-function loadEvents(uid){
-  //do some logic to get list of events for given group
-  var event_list;
-  if(TEST_MODE){
-    event_list = dummy_event_list;
-  }
-  showElement('group_event_list');
-  for(var event_item in event_list){
-      var event_id = event_list[event_item].uid;
-      var event_name = event_list[event_item].name;
-      var event_description = event_list[event_item].description;
-      //var group_icon_url = event_list[group].creator;
-      var event_date = event_list[event_item].date;
-      var event_time= event_list[event_item].time;
-      var event_location = event_list[event_item].location;
-      //var group_purpose = event_list[group].duration;
+function fetchAccessToken(handler) {
+  // We use jQuery to make an Ajax request to the server to retrieve our
+  // Access Token
+  $.getJSON('/token', {
+      // we pass along a "device" query parameter to identify the device we
+      // are connecting from. You would also pass along any other info needed for
+      // your server to establish the identity of the client
+      device: 'browser'
+  }, function(data) {
+      // The data sent back from the server should contain a long string, which
+      // is the token you'll need to initialize the SDK. This string is in a format
+      // called JWT (JSON Web Token) - more at http://jwt.io
+      console.log(data.token);
 
-      var event_line = "<li><div class=\"card teal darken-2\" style=\"margin: 5px; line-height:initial;\">";
-      event_line += "<div class=\"card-content white-text\"><span class=\"card-subtitle\">";
-      event_line += event_name + "</p><p><b>Time: </b>";
-      event_line += event_date + "at" + event_time + "</br><b>Duration: </b>";
-      event_line += "3 hours" + "</br><b>Location: </b>";
-      event_line += event_location + "</p></div><div class=\"card-action\"><a onClick=\"\" >";
-      event_line += "Leave" + "</a></div></div></li>"
-      $('#group_event_list #nav-mobile').append(event_line);
-  }
+      // Since the starter app doesn't implement authentication, the server sends
+      // back a randomly generated username for the current client, which is how
+      // they will be identified while sending messages. If your app has a login
+      // system, you should use the e-mail address or username that uniquely identifies
+      // a user instead.
+      console.log(data.identity);
+
+      handler(data);
+  });
 }
 
 
-////////////Test Functions//////////////////////
+///////////////////////////////////
+
+//NOTE: Test Functions
+
+///////////////////////////////////
+
 
 function testLoadDepartments(){
   TEST_MODE = true;
@@ -225,7 +306,7 @@ function testLoadCourses(){
 
 function testLoadGroups(){
   TEST_MODE = true;
-  loadGroups(null);
+  loadGroups("groups",null);
 }
 
 function testLoadGroupInfo(){
@@ -233,9 +314,14 @@ function testLoadGroupInfo(){
   loadGroupInfo(null);
 }
 
-function testLoadEvents(){
+function testLoadEvents_Group(){
   TEST_MODE = true;
-  loadEvents(null);
+  loadEvents("group_event_list", null);
+}
+
+function testLoadEvents_Global(){
+  TEST_MODE = true;
+  loadEvents("global_event_list", null);
 }
 var dummy_dept_list = ['Dance', 'Biology', 'Physical Education', 'Geology','Civil Engineering'];
 var dummy_course_list = ['Dance 101 ', 'Biology 304', 'Physical Education 202', 'Geology 331','Civil Engineering 432'];

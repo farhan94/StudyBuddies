@@ -2,7 +2,7 @@ body{
   background: blue;
 }
 
-.group_event_list, .group_notification_list, .messaging, .all_your_groups, .departments, .courses, .groups, .group_info{
+.global_event_list, .global_notification_list, .group_event_list, .group_notification_list, .messaging, .your_groups, .departments, .courses, .groups, .group_info{
   display: none;
 }
 
@@ -13,6 +13,10 @@ body{
   justify-content: center;
   align-items: center;
   background-color: #eee !important;
+}
+#nav-mobile li.search {
+  top: initial !important;
+  position: initial !important;
 }
 
 .messaging{
@@ -77,7 +81,7 @@ body{
   margin-top: 5%;
 }
 
-.all_your_groups .multi-level-nav{
+.your_groups .multi-level-nav{
   z-index:998;
   width: 30% !important;
   background-color: #eee !important;
@@ -121,6 +125,16 @@ body{
   margin-left: 75% !important;
   width: 25% !important;
   background-color: #eee !important;
+}
+
+.global_notification_list .multi-level-nav{
+  z-index:1000 !important;
+  margin-left: 0% !important;
+}
+
+.global_event_list .multi-level-nav{
+  z-index:1000 !important;
+  margin-left: 0% !important;
 }
 
 .collection .collection-item {
