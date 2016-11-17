@@ -2,10 +2,7 @@ package com.recursivebogosort.studybuddies.entities;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-import com.google.appengine.repackaged.com.google.api.client.json.Json;
-import com.google.appengine.repackaged.com.google.api.client.json.JsonGenerator;
-import com.google.appengine.repackaged.com.google.api.client.json.JsonParser;
-import com.google.appengine.repackaged.com.google.gson.Gson;
+
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -36,11 +33,11 @@ public class Department {
         this.courses = new ArrayList<>();
     }
 
-    public Department (String departmentName, String universityName, Ref<University> universityRef)
+    public Department (String departmentName, String universityName)
     {
         this.departmentName = departmentName;
         this.universityName = universityName;
-        this.universityRef = universityRef;
+        this
         this.courses = new ArrayList<Ref<Course>>();
     }
 
