@@ -47,7 +47,7 @@ public class Course {
         this.departmentRef = ofy().load().type(Department.class).filter("departmentName", departmentName).first();
         if(this.departmentRef.getValue() == null)
         {
-            Department department = new Department(departmentName, universityName);
+            Department department = new Department(departmentName, universityName, this.universityRef);
             ofy().save().entity(department).now();
             this.departmentRef = ofy().load().entity(department);
         }

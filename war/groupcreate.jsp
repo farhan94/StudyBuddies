@@ -148,7 +148,14 @@
                             <p class="help-block"></p>
                         </div>
                     </div> -->
-
+						<div class="control-group">
+							<label class="control-label" for="department_name">Department Name</label>
+							<div class="controls">
+								<input type="text" id="department_name" name="department_name"
+									required="true" placeholder="" class="form-control input-lg">
+								<p class="help-block">The name of the department off the course this study group is for</p>
+							</div>
+						</div>
 						<div class="control-group">
 							<label class="control-label" for="course_id">Course Id</label>
 							<div class="controls">

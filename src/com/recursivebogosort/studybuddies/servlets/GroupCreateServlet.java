@@ -74,7 +74,7 @@ public class GroupCreateServlet extends HttpServlet {
         Ref<Course> courseRef = ofy().load().type(Course.class).filter("courseId ==", courseId).first();
         Ref<Department> deptRef = ofy().load().type(Department.class).filter("departmentName ==", departmentName).first();
         Department dept = deptRef.get();
-        if(deptRef.get() == null)
+        if(dept == null)
         {
             dept = new Department (departmentName, universityName, universityRef);
             Key<Department> deptKey = ofy().save().entity(dept).now();
