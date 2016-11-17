@@ -20,14 +20,11 @@ import java.util.HashSet;
 @Entity
 public class Course {
     @Id Long id;
-    String courseId;
-    String courseName;
-    String professor;
-    @Index
-    String universityName;
-    @Index
-    String departmentName;
-
+    @Index String courseId;
+    @Index String courseName;
+    @Index String professor;
+    @Index String universityName;
+    @Index String departmentName;
     @Load Ref<University> universityRef;
     @Load Ref<Department> departmentRef;
     ArrayList<Ref<Group>> groups;
@@ -39,6 +36,7 @@ public class Course {
         this.courseName = courseName;
         this.professor = professor;
         this.universityRef = universityRef;
+
         this.departmentRef = departmentRef;
         this.groups = new ArrayList<Ref<Group>>();
     }
@@ -57,6 +55,9 @@ public class Course {
         return this.professor;
     }
 
+    public Collection<Ref<Group>> getGroupRefs(){
+    	return this.groups;
+    }
     public University getUniversity() { return universityRef.getValue(); }
 
     public void setUniversity(University university) { this.universityRef = Ref.create(Key.create(University.class, university.getName()));}
