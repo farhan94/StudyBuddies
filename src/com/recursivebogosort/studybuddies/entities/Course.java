@@ -37,6 +37,21 @@ public class Course {
         this.professor = professor;
         this.universityName = universityName;
         this.departmentName = departmentName;
+        this.universityRef = ofy().load().type(University.class).id(universityName);
+        if(universityRef.getValue() == null)
+        {
+            University university = new University(universityName);
+            ofy().save().entity(university).now();
+            this.universityRef = ofy().load().entity(university);
+        }
+        this.departmentRef = ofy().load().type(Department.class).filter("departmentName", departmentName).first();
+        if(this.departmentRef.getValue() == null)
+        {
+            Department department = new Department(departmentName, universityName);
+            ofy().save().entity(department).now();
+            this.departmentRef = ofy().load().entity(department);
+        }
+
     }
 
     public Long getId() { return id; }
