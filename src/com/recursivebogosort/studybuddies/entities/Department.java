@@ -33,11 +33,11 @@ public class Department {
         this.courses = new ArrayList<>();
     }
 
-    public Department (String departmentName, String universityName, Ref<University> universityRef)
+    public Department (String departmentName, String universityName)
     {
         this.departmentName = departmentName;
         this.universityName = universityName;
-        this.universityRef = universityRef;
+        this
         this.courses = new ArrayList<Ref<Course>>();
     }
 
