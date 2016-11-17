@@ -104,7 +104,7 @@ function loadGroups(groups_type, course){
         }
     $.ajax(getCourseGroups).done(function (response) {
       group_list = response;
-    }
+    });
   }else{
     //TODO: get groups for user
   }
