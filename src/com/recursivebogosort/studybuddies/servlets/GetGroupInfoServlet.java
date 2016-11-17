@@ -28,19 +28,7 @@ public class GetGroupInfoServlet extends HttpServlet{
 		long cID = Long.parseLong(cIDString);
 		Ref<Group> groupRef = ofy().load().type(Group.class).id(cID);
 		Group group = ofy().load().ref(groupRef).getValue();
-		JSONObject jo = new JSONObject();
-		try {
-			jo.put("uid", group.getId().toString());
-			jo.put("name", group.getGroupName());
-			jo.put("size", group.getCurrentSize());
-			jo.put("purpose", group.getGroupDescription());
-			jo.put("is_member", true);
-			jo.put("icon_url","google.com");
-		 
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONObject jo = group.groupJSON();
 //		Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(id);
 		//JSONObject jo = new JSONObject(groups.toArray());
 		
