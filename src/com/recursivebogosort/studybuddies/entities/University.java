@@ -9,8 +9,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.cmd.Query;
-import com.googlecode.objectify.impl.QueryEngine;
-import com.googlecode.objectify.impl.ref.DeadRef;
+
 
 import java.util.ArrayList;
 import java.util.Collection;

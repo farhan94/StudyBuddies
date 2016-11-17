@@ -2,10 +2,7 @@ package com.recursivebogosort.studybuddies.entities;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-import com.google.appengine.repackaged.com.google.api.client.json.Json;
-import com.google.appengine.repackaged.com.google.api.client.json.JsonGenerator;
-import com.google.appengine.repackaged.com.google.api.client.json.JsonParser;
-import com.google.appengine.repackaged.com.google.gson.Gson;
+
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -44,12 +41,19 @@ public class Department {
         this.courses = new ArrayList<Ref<Course>>();
     }
 
-    public Collection<Course> get_courses(){
-        return ofy().load().type(Course.class).filter("universityName", this.universityName)
-                .filter("departmentName", this.departmentName).list();
+    public Collection<Course> getCourses(){
+    	return ofy().load().refs(this.courses).values();
+//        return ofy().load().type(Course.class).filter("universityName", this.universityName)
+  //              .filter("departmentName", this.departmentName).list();
+    }
+    
+    public Long getID(){
+    	return this.id;
     }
 
-
+    public void addCourse(Ref<Course> c){
+    	this.courses.add(c);
+    }
 
 
 

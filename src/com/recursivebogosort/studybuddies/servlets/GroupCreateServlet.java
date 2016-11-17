@@ -6,6 +6,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.recursivebogosort.studybuddies.entities.Course;
+import com.recursivebogosort.studybuddies.entities.Department;
 import com.recursivebogosort.studybuddies.entities.Group;
 import com.recursivebogosort.studybuddies.entities.StudyBuddiesUser;
 import com.recursivebogosort.studybuddies.entities.University;
@@ -71,7 +72,18 @@ public class GroupCreateServlet extends HttpServlet {
         String universityName = req.getParameter("university_name");
         String departmentName = req.getParameter("department_name");
         Ref<Course> courseRef = ofy().load().type(Course.class).filter("courseId ==", courseId).first();
-
+        Ref<Department> deptRef = ofy().load().type(Department.class).filter("departmentName ==", departmentName).first();
+        Department dept = deptRef.get();
+        if(deptRef.get() == null)
+        {
+            dept = new Department (departmentName, universityName, universityRef);
+            Key<Department> deptKey = ofy().save().entity(dept).now();
+            deptRef = ofy().load().key(deptKey);
+            dept = deptRef.getValue();
+            System.out.println(dept.getID());
+         //   courseRef = Ref.create(courseKey);
+           // System.out.println(courseRef.getValue().getUniversity().getName());
+        }
         if(courseRef.get() == null)
         {
             Course course = new Course(courseId, courseName, professor, universityName, departmentName);
@@ -80,6 +92,10 @@ public class GroupCreateServlet extends HttpServlet {
             courseRef = ofy().load().key(courseKey);
             Course cc = courseRef.getValue();
             System.out.println(cc.getId());
+            dept.addCourse(courseRef);
+            Key<Department> deptKey = ofy().save().entity(dept).now();
+            deptRef = ofy().load().key(deptKey);
+            dept = deptRef.getValue();
          //   courseRef = Ref.create(courseKey);
            // System.out.println(courseRef.getValue().getUniversity().getName());
         }

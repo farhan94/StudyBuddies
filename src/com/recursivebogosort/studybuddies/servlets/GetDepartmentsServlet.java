@@ -33,19 +33,22 @@ public class GetDepartmentsServlet extends HttpServlet {
         String cIDString = req.getParameter("universityID");
         long cID = Long.parseLong(cIDString);
         University university = ofy().load().type(University.class).id(cID).getValue();
-
-        Object[] g = groups.toArray();
+        Collection<Course> courses = university.get_courses();
+        Object[] c = courses.toArray();
         JSONArray ar = new JSONArray();
-        for(int i = 0; i < g.length; i++){
-            Group grp = (Group) g[i];
+        for(int i = 0; i < c.length; i++){
+            Course crs = (Course) c[i];
             JSONObject jo = new JSONObject();
             try {
-                jo.put("uid", grp.getId().toString());
-                jo.put("name", grp.getGroupName());
-                jo.put("size", grp.getCurrentSize());
-                jo.put("purpose", grp.getGroupDescription());
-                jo.put("isMember", true);
-                jo.put("icon_url","google.com");
+                jo.put("uid", crs.getId().toString());
+                jo.put("course_name", crs.getCourseName());
+                jo.put("prof_name", crs.getProfessor());
+                jo.put("uni_name", crs.getUniversity());
+                jo.put("course_id", crs.getUniversity());
+                //jo.put("size", grp.getCurrentSize());
+                //jo.put("purpose", grp.getGroupDescription());
+                //jo.put("isMember", true);
+                //jo.put("icon_url","google.com");
 
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
