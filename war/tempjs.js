@@ -68,6 +68,19 @@ function loadDepartments(university){
       dept_list = dummy_dept_list;
     }
     showElement('departments');
+    var getDepartments = {
+          "async": true,
+          "crossDomain": true,
+          "url": "/getdepartment?universityID=" + university,
+          "method": "GET",
+          "headers": {
+            "cache-control": "no-cache",
+            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+          }
+        }
+    $.ajax(getDepartments).done(function (response) {
+      dept_list = response;
+    });
     for(var dept in dept_list){
         var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept].department_name + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept] + "</a></li>"
         $('#departments #nav-mobile').append(dept_line);
@@ -80,6 +93,19 @@ function loadCourses(department){
   if(TEST_MODE){
     course_list = dummy_course_list;
   }
+  var getCourses = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/getcourse?departmentID=" + department,
+        "method": "GET",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(getCourses).done(function (response) {
+    course_list = response;
+  });
   showElement('courses');
   for(var course in course_list){
       var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups," + course_list[course].course_name + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
