@@ -81,6 +81,8 @@ public class GroupCreateServlet extends HttpServlet {
             deptRef = ofy().load().key(deptKey);
             dept = deptRef.getValue();
             System.out.println(dept.getID());
+            universityRef.get().addDept(deptRef);
+            ofy().save().entity(universityRef.getValue()).now();
          //   courseRef = Ref.create(courseKey);
            // System.out.println(courseRef.getValue().getUniversity().getName());
         }

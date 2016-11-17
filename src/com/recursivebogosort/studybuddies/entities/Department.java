@@ -51,9 +51,17 @@ public class Department {
     	return this.id;
     }
 
+    public String getDepartmentName(){
+    	return this.departmentName;
+    }
     public void addCourse(Ref<Course> c){
     	this.courses.add(c);
     }
+
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
 
 
 
