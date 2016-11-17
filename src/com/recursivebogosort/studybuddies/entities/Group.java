@@ -15,7 +15,7 @@ import com.googlecode.objectify.annotation.Load;
 public class Group{
 	@Id Long id;
     String groupName;
-    String groupDiscription;
+    String groupDescription = "";
     int currentSize;            // Current number of members not including the owner
 	int maxSize;                // Max number of members not including the owner
 
@@ -41,7 +41,9 @@ public class Group{
 	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
     }
 
-
+	public String getGroupDescription(){
+		return this.groupDescription;
+	}
 	public Long getId(){ return id;}
 
     public String getGroupName() { return groupName; }

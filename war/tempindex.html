@@ -1,0 +1,348 @@
+<html>
+  <head>
+      <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="tempindex.css" rel="stylesheet">
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+      <link href="https://rawgit.com/Dogfalo/materialize/master/css/prism.css" rel="stylesheet">
+      <link href="https://rawgit.com/Dogfalo/materialize/master/css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="tempjs.js"></script>
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <title>Study Buddies</title>
+  </head>
+  <body style="display:flex;flex-direction:row;">
+      <ul id="nav-mobile" class="side-nav fixed z-depth-4" style="transform: translateX(0%); width: 20%;z-index:999;">
+          <img src="http://www.euiwonkim.com/images/studybuddy.png" style="width: 90%;margin-top: -20%;"></img>
+          <li class="search">
+              <div class="search-wrapper card">
+                  <input id="search"><i class="material-icons">search</i>
+                  <div class="search-results"></div>
+              </div>
+          </li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal">Home</a></li>
+          <li class="bold"><a onclick="findGroups()" class="waves-effect waves-teal">Find/Create a Group</a></li>
+          <li class="no-padding">
+              <ul class="collapsible collapsible-accordion">
+                  <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Your Groups</a>
+                      <div class="collapsible-body">
+                          <ul>
+                              <li><a href="#">Fav Group 1</a></li>
+                              <li><span class="new badge">2</span><a href="#">Fav Group 2</a></li>
+                              <li><span class="new badge">8</span><a href="#">Fav Group 3</a></li>
+                              <li onClick="allGroups()"><span class="badge">3</span><a href="#">All Groups</a></li>
+                          </ul>
+                      </div>
+                  </li>
+              </ul>
+          </li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal"><span class="new badge">1</span>Events</a></li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li>
+          <li><a class="waves-effect waves-light btn">Logout</a></li>
+      </ul>
+      <div id="background" class="background">
+        <h2>Hi Mark,</h2>
+      </div>
+      <div id="messaging" class="messaging">
+        <ul>
+            <li>
+              <div class="card blue-grey darken-2 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Farhan</span>
+                    <p>Almost there</p>
+                  </div>
+              </div>
+              <div class="card blue-grey darken-2 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Ryan</span>
+                    <p>We're late too</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card blue-grey lighten-2 message text-right">
+                  <div class="card-content white-text">
+                    <p>here!</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card blue-grey lighten-2 message text-right">
+                  <div class="card-content white-text">
+                    <p>Farhan I don't see you where are you?</p>
+                  </div>
+              </div>
+            </li>
+            <li>
+              <div class="card blue-grey darken-2 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Farhan</span>
+                    <p>Almost there</p>
+                  </div>
+              </div>
+              <div class="card blue-grey darken-2 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Ryan</span>
+                    <p>We're late too</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card blue-grey lighten-2 message text-right">
+                  <div class="card-content white-text">
+                    <p>here!</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card blue-grey lighten-2 message text-right">
+                  <div class="card-content white-text">
+                    <p>Farhan I don't see you where are you?</p>
+                  </div>
+              </div>
+            </li>
+        </ul>
+        <div id="message_input" class="input-field message_input">
+          <i class="material-icons prefix" style="padding-top: .5rem;">textsms</i>
+          <input id="icon_prefix" type="text" style="width:75%">
+          <label for="icon_prefix">Message</label>
+          <a onClick="submitMessage()" class="waves-effect waves-light btn">Submit</a>
+        </div>
+      </div>
+      <div id="all_your_groups" class="all_your_groups">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li class="search" style="position:fixed;">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="buffer"><a href="#" class="waves-effect waves-teal"></a></li>
+            <li>
+              <ul class="collection">
+                <li onClick="showElement('group_info')" class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="circle group_icon">
+                  <div class="study_budy_info">
+                    <span class="title">Your Study Group 1</span>
+                    <p>3 members <br>
+                      Purpose 1
+                    </p>
+                  </div>
+                  <i class="small material-icons" style="align-self: center;">info_outline</i>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle green group_icon">insert_chart</i>
+                <div class="study_budy_info">
+                  <span class="title">Your Study Group 2</span>
+                  <p>10 Members <br>
+                     Purpose 3
+                  </p>
+                </div>
+                <i class="small material-icons" style="align-self: center;">info_outline</i>
+              </li>
+              <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle red group_icon">play_arrow</i>
+                <div class="study_budy_info">
+                  <span class="title">Your Study Group 3</span>
+                  <p>14 Members <br>
+                     Purpose 4
+                  </p>
+                </div>
+                <i class="small material-icons" style="align-self: center;">info_outline</i>
+              </li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+      <div id="departments" class="departments">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%); z-index:998;">
+            <li class="search">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="buffer"><a href="#" class="waves-effect waves-teal"></a></li>
+            <li class="bold"><a onClick="showElement('courses')" class="waves-effect waves-teal">Electrical and Computer Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Chemical Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Math</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Dance</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Computer Science</a></li>
+        </ul>
+      </div>
+      <div id="courses" class="courses">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:998;">
+            <li class="search">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="buffer"><a href="#" class="waves-effect waves-teal"></a></li>
+            <li class="bold back_option"><a onClick="hideElement('courses')" class="waves-effect waves-teal"> < Switch Departments</a></li>
+            <li class="bold"><a onClick="showElement('groups')" class="waves-effect waves-teal">EE461L: Software Engineering Lab</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE445L: Embedded Systems Lab</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE316K: Digital Logic</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE302: Introduction to Electrical Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE464K: Senior Design</a></li>
+        </ul>
+      </div>
+      <div id="groups" class="groups">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li class="search" style="position:fixed;">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="buffer"><a href="#" class="waves-effect waves-teal"></a></li>
+            <li>
+              <ul id="collection" class="collection">
+                <li onClick="showElement('group_info')" class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="circle group_icon">
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 1</span>
+                    <p>3 members <br>
+                      Purpose 1
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Leave<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle group_icon">folder</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 2</span>
+                    <p>5 Members <br>
+                       Purpose 2
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle green group_icon">insert_chart</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 3</span>
+                    <p>7 Members <br>
+                       Purpose 3
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle red group_icon">play_arrow</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 4</span>
+                    <p>4 Members <br>
+                       Purpose 4
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+              </li>
+              <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle green group_icon">insert_chart</i>
+                <div class="study_budy_info">
+                  <span class="title">Study Group 5</span>
+                  <p>10 Members <br>
+                     Purpose 3
+                  </p>
+                </div>
+                <a href="#!" class="group_joinORleave">
+                  <p>Join<br>
+                     Group
+                  </p>
+                </a>
+              </li>
+              <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle red group_icon">play_arrow</i>
+                <div class="study_budy_info">
+                  <span class="title">Study Group 6</span>
+                  <p>14 Members <br>
+                     Purpose 4
+                  </p>
+                </div>
+                <a href="#!" class="group_joinORleave">
+                  <p>Join<br>
+                     Group
+                  </p>
+                </a>
+              </li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+      <div id="group_info" class="group_info">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:999;">
+          <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="group_icon" style="width:80%">
+          <li id="name" class="bold" style="align-self: center;">Study Group 1</li>
+          <li id="purpose" class="bold" style="align-self: center;">Purpose</a></li>
+          <li id="notifications"class="bold"><a onClick="showElement('group_notification_list')" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li>
+          <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal"><span id="badge" class="new badge">3</span>Messages</a></li>
+          <li id="events"class="bold"><a onClick="showElement('group_event_list')" class="waves-effect waves-teal"><span id="badge" class="badge">5</span>Events</a></li>
+          <li id="settings"class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li>
+          <li id="joinleavebtn"><a class="waves-effect waves-light btn">Join/Leave Group</a></li>
+        </ul>
+      </div>
+      <div id="group_notification_list" class="group_notification_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li><a onClick="hideElement('group_notification_list')" ><i class="material-icons medium">navigate_before</i> Group Notifications</a></li>
+            <ul class="collection">
+              <li class="collection-item"><b>Exam 2 Review</b> in <b>2 hours</b>  at <b>UTC</b> </li>
+              <li class="collection-item">New Event created called <b>Exam 2 Review</b> </li>
+              <li class="collection-item"><b>Project Work Session</b>  in <b>1 week</b>  at <b>TBD</b> </li>
+            </ul>
+        </ul>
+      </div>
+      <div id="group_event_list" class="group_event_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li><a onClick="hideElement('group_event_list')" ><i class="material-icons medium">navigate_before</i> Group Events</a></li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Exam 2 Review</p>
+                  <p><b>Time: </b>November 15th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>3 hours</br>
+                  <b>Location: </b>UTC</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Final Exam Review</p>
+                  <p><b>Time: </b>November 25th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>5 hours</br>
+                  <b>Location: </b>Taco Bell</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+  </body>
+</html>

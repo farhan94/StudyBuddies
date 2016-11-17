@@ -1,0 +1,165 @@
+body{
+  background: blue;
+}
+
+.group_event_list, .group_notification_list, .messaging, .all_your_groups, .departments, .courses, .groups, .group_info{
+  display: none;
+}
+
+.background{
+  margin-left: 20% !important;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eee !important;
+}
+
+.messaging{
+  position: fixed;
+  width: 55%;
+  height: 100%;
+  margin-left: 20%;
+  flex-direction: column;
+  background-color: #fff !important;
+  overflow-y: auto;
+}
+
+.message{
+  margin: 10px !important;
+  max-width: 50%;
+}
+
+.message-right{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.message_input{
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+
+.text-right{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.multi-level-nav{
+  -webkit-box-shadow: 2px 0px 28px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 0px 28px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 0px 28px 0px rgba(0,0,0,0.75);
+  margin-left: 20% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.multi-level-nav li.search{
+  position: fixed !important;
+  top: 0px !important;
+  margin-top: 3% !important;
+  margin-bottom: 3% !important;
+}
+.multi-level-nav li.search:hover {
+  background-color: rgba(0,0,0,0) !important;
+}
+.multi-level-nav input#search{
+  box-shadow: none !important;
+}
+
+.collapsible-body span.new.badge {
+    margin-right: 30px;
+}
+
+.buffer{
+  margin-top: 5%;
+}
+
+.all_your_groups .multi-level-nav{
+  z-index:998;
+  width: 30% !important;
+  background-color: #eee !important;
+}
+
+.departments .multi-level-nav{
+  z-index:998;
+  width: 25% !important;
+  background-color: #eee !important;
+}
+
+.courses .multi-level-nav{
+  z-index:998;
+  width: 25% !important;
+  background-color: #eee !important;
+}
+
+.groups .multi-level-nav{
+  z-index:997;
+  margin-left: 45% !important;
+  width: 30% !important;
+  background-color: #eee !important;
+}
+
+.group_info .multi-level-nav{
+  z-index:996;
+  margin-left: 75% !important;
+  width: 25% !important;
+  background-color: #eee !important;
+}
+
+.group_notification_list .multi-level-nav{
+  z-index:999 !important;
+  margin-left: 75% !important;
+  width: 25% !important;
+  background-color: #eee !important;
+}
+
+.group_event_list .multi-level-nav{
+  z-index:999 !important;
+  margin-left: 75% !important;
+  width: 25% !important;
+  background-color: #eee !important;
+}
+
+.collection .collection-item {
+  margin: 10 !important;
+}
+
+li.collection-item.avatar{
+  display: flex;
+  justify-content: space-between;
+}
+
+.group_icon{
+  align-self: center;
+}
+
+.group_badge{
+
+}
+
+.group_joinORleave{
+  line-height: 1.2em !important;
+  text-align: center;
+  align-self: center;
+  padding: 7 10 5 10 !important;
+  display: flex !important;
+  justify-content: center;
+}
+
+
+a.group_joinORleave p {
+  color: darkgoldenrod;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+
+
+/*
+
+Universal CSS styles
+
+*/

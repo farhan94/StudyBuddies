@@ -19,6 +19,8 @@ public class Event {
     // int currentSize;            // Current number of members not including the owner
 	// int maxSize;                // Max number of members not including the owner
     String date;
+    String location;
+    
 	@Load Ref<Group> group;
 	
 	 private Event(){}

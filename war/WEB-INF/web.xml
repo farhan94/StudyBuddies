@@ -30,6 +30,30 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>EventServlet</servlet-name>
 			<url-pattern>/eventcreate</url-pattern>
 		</servlet-mapping>
+		<servlet>
+			<servlet-name>GetInfoServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetInfoServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetInfoServlet</servlet-name>
+			<url-pattern>/getinfo</url-pattern>
+		</servlet-mapping>
+		<servlet>
+			<servlet-name>GetGroupServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetGroupServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetGroupServlet</servlet-name>
+			<url-pattern>/getgroupbycourse</url-pattern>
+		</servlet-mapping>
+		<servlet>
+			<servlet-name>GetGroupInfoServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetGroupInfoServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetGroupInfoServlet</servlet-name>
+			<url-pattern>/getgroupinfo</url-pattern>
+		</servlet-mapping>
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->
