@@ -4,6 +4,8 @@ package com.recursivebogosort.studybuddies.entities;
  * Created by ryan on 11/7/16.
  */
 
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -87,4 +89,22 @@ public class Course {
     public Collection<Group> get_courses(){
         return ofy().load().refs(groups).values();
     }
+
+    public JSONObject courseJSON()
+    {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("uid", id);
+            jo.put("courseId", courseId);
+            jo.put("courseName", courseName);
+            jo.put("professor", professor);
+            jo.put("universityName", universityName);
+            jo.put("departmentName", departmentName);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jo;
+    }
+
 }
