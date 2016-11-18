@@ -22,7 +22,7 @@ import java.util.Collection;
 @Entity
 public class Department {
     @Id
-    Long id;
+    String id;
     @Index
     String departmentName;
     @Index
@@ -37,6 +37,7 @@ public class Department {
 
     public Department (String departmentName, String universityName,  Ref<University> universityRef)
     {
+    	id = departmentName+universityName;
         this.departmentName = departmentName;
         this.universityName = universityName;
         this.universityRef = universityRef;
@@ -49,7 +50,7 @@ public class Department {
   //              .filter("departmentName", this.departmentName).list();
     }
     
-    public Long getID(){
+    public String getID(){
     	return this.id;
     }
 
@@ -60,7 +61,7 @@ public class Department {
     	this.courses.add(c);
     }
 
-    public Long getId() {
+    public String getId() {
 		// TODO Auto-generated method stub
 		return this.id;
 	}

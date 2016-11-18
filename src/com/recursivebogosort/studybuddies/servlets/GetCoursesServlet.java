@@ -30,8 +30,8 @@ public class GetCoursesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String cIDString = req.getParameter("departmentID");
-        long cID = Long.parseLong(cIDString);
+        String cID = req.getParameter("departmentID");
+        // cID = Long.parseLong(cIDString);
         Department dept = ofy().load().type(Department.class).id(cID).getValue();
         Collection<Course> courses = dept.getCourses();
         Object[] c = courses.toArray();
@@ -40,7 +40,7 @@ public class GetCoursesServlet extends HttpServlet {
             Course crs = (Course) c[i];
             JSONObject jo = new JSONObject();
             try {
-                jo.put("course_uid", crs.getId().toString());
+                jo.put("course_uid", crs.getId());
                 jo.put("course_name", crs.getCourseName());
                 jo.put("prof_name", crs.getProfessor());
                 jo.put("uni_name", crs.getUniversity().getName());
