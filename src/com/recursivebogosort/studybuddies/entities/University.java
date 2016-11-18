@@ -50,13 +50,4 @@ public class University {
     {
         return ofy().load().type(StudyBuddiesUser.class).filter("universityName", this.name).list();
     }
-
-
-
-
-
-
-
-
-
 }

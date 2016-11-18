@@ -95,11 +95,11 @@ public class Course {
         JSONObject jo = new JSONObject();
         try {
             jo.put("uid", id);
-            jo.put("courseId", courseId);
-            jo.put("courseName", courseName);
+            jo.put("course_id", courseId);
+            jo.put("course_name", courseName);
             jo.put("professor", professor);
-            jo.put("universityName", universityName);
-            jo.put("departmentName", departmentName);
+            jo.put("university_name", universityName);
+            jo.put("department_name", departmentName);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
