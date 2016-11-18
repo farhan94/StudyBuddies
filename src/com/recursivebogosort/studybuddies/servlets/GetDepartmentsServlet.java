@@ -41,7 +41,7 @@ public class GetDepartmentsServlet extends HttpServlet {
             Department crs = (Department) c[i];
             JSONObject jo = new JSONObject();
             try {
-                jo.put("uid", crs.getId().toString());
+                jo.put("department_uid", crs.getId().toString());
                 jo.put("department_name", crs.getDepartmentName());
 //                jo.put("prof_name", crs.getProfessor());
 //                jo.put("uni_name", crs.getUniversity().getName());

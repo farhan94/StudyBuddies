@@ -40,7 +40,7 @@ public class GetCoursesServlet extends HttpServlet {
             Course crs = (Course) c[i];
             JSONObject jo = new JSONObject();
             try {
-                jo.put("uid", crs.getId().toString());
+                jo.put("course_uid", crs.getId().toString());
                 jo.put("course_name", crs.getCourseName());
                 jo.put("prof_name", crs.getProfessor());
                 jo.put("uni_name", crs.getUniversity().getName());
