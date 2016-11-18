@@ -43,20 +43,7 @@ public class GetGroupServlet extends HttpServlet{
 		JSONArray ar = new JSONArray();
 		for(int i = 0; i < g.length; i++){
 			Group grp = (Group) g[i];
-			JSONObject jo = new JSONObject();
-			try {
-				jo.put("uid", grp.getId().toString());
-				jo.put("name", grp.getGroupName());
-				jo.put("size", grp.getCurrentSize());
-				jo.put("purpose", grp.getGroupDescription());
-				jo.put("isMember", true);
-				jo.put("icon_url","google.com");
-			 
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			ar.put(jo);
+			ar.put(grp.groupJSON());
 		}
 //		Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(id);
 		//JSONObject jo = new JSONObject(groups.toArray());

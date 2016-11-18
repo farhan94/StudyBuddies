@@ -62,6 +62,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>GetDepartmentsServlet</servlet-name>
 			<url-pattern>/getdepartments</url-pattern>
 		</servlet-mapping>
+				<servlet>
+			<servlet-name>GetCoursesServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetCoursesServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetCoursesServlet</servlet-name>
+			<url-pattern>/getcourses</url-pattern>
+		</servlet-mapping>
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->

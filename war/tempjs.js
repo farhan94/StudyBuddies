@@ -67,11 +67,12 @@ function loadDepartments(university){
     if(TEST_MODE){
       dept_list = dummy_dept_list;
     }
+    $('#departments #nav-mobile').empty();
     showElement('departments');
     var getDepartments = {
           "async": true,
           "crossDomain": true,
-          "url": "/getdepartment?universityID=" + university,
+          "url": "/getdepartments?universityID=" + university,
           "method": "GET",
           "headers": {
             "cache-control": "no-cache",
@@ -80,11 +81,11 @@ function loadDepartments(university){
         }
     $.ajax(getDepartments).done(function (response) {
       dept_list = response;
+      for(var dept in dept_list){
+          var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept].department_uid + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept].department_name + "</a></li>"
+          $('#departments #nav-mobile').append(dept_line);
+      }
     });
-    for(var dept in dept_list){
-        var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept].department_name + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept] + "</a></li>"
-        $('#departments #nav-mobile').append(dept_line);
-    }
 }
 
 function loadCourses(department){
@@ -93,10 +94,12 @@ function loadCourses(department){
   if(TEST_MODE){
     course_list = dummy_course_list;
   }
+  $('#courses #nav-mobile').empty();
+  showElement('courses');
   var getCourses = {
         "async": true,
         "crossDomain": true,
-        "url": "/getcourse?departmentID=" + department,
+        "url": "/getcourses?departmentID=" + department,
         "method": "GET",
         "headers": {
           "cache-control": "no-cache",
@@ -105,17 +108,17 @@ function loadCourses(department){
       }
   $.ajax(getCourses).done(function (response) {
     course_list = response;
+    for(var course in course_list){
+        var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups\','" + course_list[course].course_uid + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course].course_name + "</a></li>"
+        $('#courses #nav-mobile').append(course_line);
+    }
   });
-  showElement('courses');
-  for(var course in course_list){
-      var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups," + course_list[course].course_name + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course] + "</a></li>"
-      $('#courses #nav-mobile').append(course_line);
-  }
 }
 
 function loadGroups(groups_type, course){
   var group_list;
   if(TEST_MODE){ group_list = dummy_group_list; }
+  $('#' + groups_type + ' #nav-mobile #collection').empty();
   showElement(groups_type);
   if(course != null){
     var getCourseGroups = {
@@ -130,12 +133,12 @@ function loadGroups(groups_type, course){
         }
     $.ajax(getCourseGroups).done(function (response) {
       group_list = response;
+      for(var group in group_list){
+          addGroup(groups_type, group_list[group]);
+      }
     });
   }else{
     //TODO: get groups for user
-  }
-  for(var group in group_list){
-      addGroup(groups_type, group);
   }
 }
 
@@ -199,14 +202,13 @@ function addMessage(message){
 }
 
 function addGroup(groups_type, group){
-  //do some logic to get list of groups for given course
-    var group_uid = group_list[group].uid;
-    var group_icon_url = group_list[group].icon_url;
-    var group_name = group_list[group].name;
-    var group_size = group_list[group].size;
-    var group_purpose = group_list[group].purpose;
-    var group_join_leave = group_list[group].is_member ? 'Leave' : 'Join';
-    var group_line = "<li onClick=\"showGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
+    var group_uid = group.uid;
+    var group_icon_url = group.icon_url;
+    var group_name = group.name;
+    var group_size = group.size;
+    var group_purpose = group.purpose;
+    var group_join_leave = group.is_member ? 'Leave' : 'Join';
+    var group_line = "<li onClick=\"loadGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
     group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
     group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div>";
@@ -237,42 +239,56 @@ function addEvent(event_type, event_item){
 
 
 
-function loadGroupInfo(uid){
+function loadGroupInfo(group){
   //do some logic to get group information for given uid
+	
   var group
   if(TEST_MODE){
     group = dummy_group;
   }
-  var group_icon_url = group.icon_url;
-  var group_name = group.name;
-  var isMember = group.is_member;
-  var group_purpose = group.purpose;
-  var group_new_notifications = 4;
-  var group_new_messages = 3;
-  var group_events = 5;
-  showElement("group_info");
-  $('#group_info #nav-mobile img')[0].src = group_icon_url;
-  $('#group_info #nav-mobile #name')[0].textContent = group_name;
-  $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
-  $('#group_info #nav-mobile #joinleavebtn')[0].remove();
-  if(!isMember){
-    $('#group_info #nav-mobile #notifications')[0].style.display = "none";
-    $('#group_info #nav-mobile #messages')[0].style.display = "none";
-    $('#group_info #nav-mobile #events')[0].style.display = "none";
-    $('#group_info #nav-mobile #settings')[0].style.display = "none";
-  }else{
-    $('#group_info #nav-mobile')[0].style.display = "flex";
-    $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
-    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + uid + ")");
-    $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
-    $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
-    $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + uid + ")");
-  }
-  var color = isMember ? "red" : "";
-  var join_or_leave = isMember ? "Leave" : "Join";
+  var getGroupInfo = {
+          "async": true,
+          "crossDomain": true,
+          "url": "/getgroupinfo?groupID=" + group,
+          "method": "GET",
+          "headers": {
+            "cache-control": "no-cache",
+            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+          }
+        }
+    $.ajax(getGroupInfo).done(function (response) {
+      group = response;
+    	  var group_icon_url = group.icon_url;
+    	  var group_name = group.name;
+    	  var isMember = group.is_member;
+    	  var group_purpose = group.purpose;
+    	  var group_new_notifications = 4;
+    	  var group_new_messages = 3;
+    	  var group_events = 5;
+    	  $('#group_info #nav-mobile img')[0].src = group_icon_url;
+    	  $('#group_info #nav-mobile #name')[0].textContent = group_name;
+    	  $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
+    	  $('#group_info #nav-mobile #joinleavebtn')[0].remove();
+    	  if(!isMember){
+    	    $('#group_info #nav-mobile #notifications')[0].style.display = "none";
+    	    $('#group_info #nav-mobile #messages')[0].style.display = "none";
+    	    $('#group_info #nav-mobile #events')[0].style.display = "none";
+    	    $('#group_info #nav-mobile #settings')[0].style.display = "none";
+    	  }else{
+    	    $('#group_info #nav-mobile')[0].style.display = "flex";
+    	    $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
+    	    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
+    	    $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
+    	    $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
+    	    $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + group.uid + ")");
+    	  }
+    	  var color = isMember ? "red" : "";
+    	  var join_or_leave = isMember ? "Leave" : "Join";
 
-  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
-  $('#group_info #nav-mobile').append(btn);
+    	  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
+    	  $('#group_info #nav-mobile').append(btn);
+    });
+  showElement("group_info");
 }
 
 ///////////////////////////////////

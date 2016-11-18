@@ -3,6 +3,8 @@ package com.recursivebogosort.studybuddies.entities;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -51,11 +53,29 @@ public class Department {
     	return this.id;
     }
 
+    public String getDepartmentName(){
+    	return this.departmentName;
+    }
     public void addCourse(Ref<Course> c){
     	this.courses.add(c);
     }
 
+    public Long getId() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
 
-
+    public JSONObject departmentJSON()
+    {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("uid",id);
+            jo.put("department_name", departmentName);
+            jo.put("university_name", universityName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo;
+    }
 
 }

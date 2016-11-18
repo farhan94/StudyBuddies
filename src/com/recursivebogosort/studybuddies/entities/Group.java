@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
+
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -147,5 +150,22 @@ public class Group{
     	ofy().save().entity(sbuo).now();
     	//iterate through every group member and owner and add the event to their event list
     }
+
+    public JSONObject groupJSON()
+	{
+		JSONObject jo = new JSONObject();
+		try {
+			jo.put("uid", getId().toString());
+			jo.put("name", getGroupName());
+			jo.put("size", getCurrentSize());
+			jo.put("purpose", getGroupDescription());
+			jo.put("is_member", true);
+			jo.put("icon_url","google.com");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jo;
+	}
 
 }

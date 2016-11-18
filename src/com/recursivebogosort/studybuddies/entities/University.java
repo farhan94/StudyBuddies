@@ -50,13 +50,11 @@ public class University {
     {
         return ofy().load().type(StudyBuddiesUser.class).filter("universityName", this.name).list();
     }
-
-
-
-
-
-
-
-
+    public void addDept(Ref<Department> dept){
+    	if (this.departments == null){
+    		this.departments = new ArrayList<Ref<Department>>();
+    	}
+    	departments.add(dept);
+    }
 
 }
