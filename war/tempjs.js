@@ -67,7 +67,7 @@ function loadDepartments(university){
     if(TEST_MODE){
       dept_list = dummy_dept_list;
     }
-    $('#departments #nav-mobile').empty();
+    $('#departments #nav-mobile li').not('li:first').empty()
     showElement('departments');
     var getDepartments = {
           "async": true,
@@ -94,7 +94,7 @@ function loadCourses(department){
   if(TEST_MODE){
     course_list = dummy_course_list;
   }
-  $('#courses #nav-mobile').empty();
+  $('#courses #nav-mobile li').not('li:first').not('li:first').empty()
   showElement('courses');
   var getCourses = {
         "async": true,
@@ -118,7 +118,7 @@ function loadCourses(department){
 function loadGroups(groups_type, course){
   var group_list;
   if(TEST_MODE){ group_list = dummy_group_list; }
-  $('#' + groups_type + ' #nav-mobile #collection').empty();
+  $('#' + groups_type + ' #nav-mobile #collection').empty()
   showElement(groups_type);
   if(course != null){
     var getCourseGroups = {
@@ -241,7 +241,7 @@ function addEvent(event_type, event_item){
 
 function loadGroupInfo(group){
   //do some logic to get group information for given uid
-	
+
   var group
   if(TEST_MODE){
     group = dummy_group;
