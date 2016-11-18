@@ -1,0 +1,22 @@
+
+
+-Get it done
+
+FrontEnd
+-Events
+--add ajax call for events query and integrate into frontend
+-Add area for creating a group
+-Add area for creating an event
+-Add area for user Settings / Profile
+-Favorite groups
+--move your_groups to it's own testLoad
+
+Backend
+-Servelets
+--JoinLeaveGroupServelet
+--EventsReminderServelet
+---email
+---sms
+-User
+--Registration
+---no longer a dropdown list
