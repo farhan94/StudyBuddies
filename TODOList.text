@@ -13,7 +13,8 @@ FrontEnd
 
 Backend
 -Servelets
---JoinLeaveGroupServelet
+--JoinLeaveGroupServelet DONE
+--private groups
 --EventsReminderServelet
 ---email
 ---sms

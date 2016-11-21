@@ -52,6 +52,36 @@
 <body>
 
 <p>
+<form class="form-horizontal" action="/joingroup" method="POST">
+						<div class="control-group">
+							<label class="control-label" for="groupID">Group ID</label>
+							<div class="controls">
+								<input type="text" id="groupID" name="groupID"
+									required="true" placeholder="" class="form-control input-lg">
+								<p class="help-block">JoinGroupByID</p>
+							</div>
+						</div>
+						<div class="controls">
+								<button type="submit" class="btn btn-success">Join
+									Group</button>
+								<a href="/dashboard.jsp" class="btn btn-danger"> Cancel</a>
+							</div>
+</form>
+<form class="form-horizontal" action="/leavegroup" method="POST">
+						<div class="control-group">
+							<label class="control-label" for="groupID">Group ID</label>
+							<div class="controls">
+								<input type="text" id="groupID" name="groupID"
+									required="true" placeholder="" class="form-control input-lg">
+								<p class="help-block">LeaveGroupByID</p>
+							</div>
+						</div>
+						<div class="controls">
+								<button type="submit" class="btn btn-success">Leave
+									Group</button>
+								<a href="/dashboard.jsp" class="btn btn-danger"> Cancel</a>
+							</div>
+</form>
 <a href="/groupcreate.jsp" class="btn btn-danger"> Create Group</a>
 <a href="/eventcreate.jsp" class="btn btn-danger"> Create Event</a>
 <%
