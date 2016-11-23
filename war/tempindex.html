@@ -25,16 +25,17 @@
               </div>
           </li>
           <li class="bold"><a onClick="hideAll()" class="waves-effect waves-teal">Home</a></li>
-          <li class="bold"><a onclick="findGroups('Something')" class="waves-effect waves-teal">Find/Create a Group</a></li>
+          <li class="bold"><a class="waves-effect waves-teal" href="#modal1">Create a Group</a></li>
+          <li class="bold"><a onclick="findGroups('Something')" class="waves-effect waves-teal">Find a Group</a></li>
+          <li class="bold" onClick="yourGroups()"><span class="badge">3</span><a href="#">Your Groups</a></li>
           <li class="no-padding">
               <ul class="collapsible collapsible-accordion">
-                  <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Your Groups</a>
+                  <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Favorite Groups</a>
                       <div class="collapsible-body">
                           <ul>
                               <li><a href="#">Fav Group 1</a></li>
                               <li><span class="new badge">2</span><a href="#">Fav Group 2</a></li>
                               <li><span class="new badge">8</span><a href="#">Fav Group 3</a></li>
-                              <li onClick="yourGroups()"><span class="badge">3</span><a href="#">All Groups</a></li>
                           </ul>
                       </div>
                   </li>
@@ -42,8 +43,8 @@
           </li>
           <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li>
           <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal"><span class="new badge">1</span>Events</a></li>
-          <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
-          <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li>
+          <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
+          <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li> -->
           <li><a class="waves-effect waves-light btn">Logout</a></li>
       </ul>
       <div id="global_notification_list" class="global_notification_list">
@@ -310,7 +311,7 @@
           <li id="notifications"class="bold"><a onClick="loadNotifications('group_notification_list', null)" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li>
           <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal"><span id="badge" class="new badge">3</span>Messages</a></li>
           <li id="events"class="bold"><a onClick="loadEvents('group_event_list', null);" class="waves-effect waves-teal"><span id="badge" class="badge">5</span>Events</a></li>
-          <li id="settings"class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li>
+          <li id="create_event"class="bold"><a class="waves-effect waves-teal" href="#modal2">Create Event</a></li>
           <li id="joinleavebtn"><a class="waves-effect waves-light btn">Join/Leave Group</a></li>
         </ul>
       </div>
@@ -355,5 +356,77 @@
             </li>
         </ul>
       </div>
+      <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <div class="input-field">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input required placeholder="Ex: Awesome Group Name" id="creategroup_group_name" type="text" class="validate">
+          <label for="creategroup_group_name">Group Name</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">subject</i>
+          <input required placeholder="Ex: Study group for Final Exam" id="creategroup_group_description" type="text" class="validate">
+          <label for="creategroup_group_description">Group Description</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Electrical and Computer Engineering" id="creategroup_department" type="text" class="validate">
+          <label for="creategroup_department">Department</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: EE 461L" id="creategroup_course_id" type="text" class="validate">
+          <label for="creategroup_course_id">Course ID</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Software Lab" id="creategroup_course_name" type="text" class="validate">
+          <label for="creategroup_course_name">Course Name</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Dr. Che" id="creategroup_professor" type="text" class="validate">
+          <label for="creategroup_professor">Professor</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: 5" id="creategroup_maxsize" type="text" class="validate">
+          <label for="creategroup_maxsize">Group Max Size</label>
+        </div>
+        <div class="input-field">
+          <p>
+            <input type="checkbox" id="test5" />
+            <label for="test5">Private Group</label>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Group</a>
+      </div>
+    </div>
+    <div id="modal2" class="modal">
+      <div class="modal-content">
+        <div class="input-field">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input required placeholder="Ex: Awesome Event Name" id="createevent_event_name" type="text" class="validate">
+          <label for="createevent_event_name">Event Name</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">subject</i>
+          <input required placeholder="Ex: Study Session for Final" id="createevent_event_description" type="text" class="validate">
+          <label for="createevent_event_description">Event Description</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: UTC 3.110" id="createevent_location" type="text" class="validate">
+          <label for="createevent_location">Location</label>
+        </div>
+        <div class="input-field">
+          <input id="createevent_date" type="date" class="datepicker">
+          <label for="createevent_date">Date</label>
+        </div>
+        <div class="input-field">
+          <input id="createevent_time" type="time" class="timepicker">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
+      </div>
+    </div>
   </body>
 </html>
