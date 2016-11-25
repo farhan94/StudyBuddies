@@ -1,5 +1,21 @@
 
+
+///////////////////////////////////
+
+//NOTE: Global Variables
+
+///////////////////////////////////
+
 TEST_MODE = false;
+
+
+
+
+///////////////////////////////////
+
+//NOTE: Basic Functions
+
+///////////////////////////////////
 
 $(document).ready(function(){
    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
@@ -8,6 +24,7 @@ $(document).ready(function(){
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15 // Creates a dropdown of 15 years to control year
     });
+    connectSendBird();
  });
 
 var element_list = ["group_info", "messaging","global_notification_list","global_event_list","your_groups","departments","courses","groups","group_notification_list","group_event_list"];
@@ -311,31 +328,130 @@ function isAuthor(message){
   return true;
 }
 
-function fetchAccessToken(handler) {
-  // We use jQuery to make an Ajax request to the server to retrieve our
-  // Access Token
-  $.getJSON('/token', {
-      // we pass along a "device" query parameter to identify the device we
-      // are connecting from. You would also pass along any other info needed for
-      // your server to establish the identity of the client
-      device: 'browser'
-  }, function(data) {
-      // The data sent back from the server should contain a long string, which
-      // is the token you'll need to initialize the SDK. This string is in a format
-      // called JWT (JSON Web Token) - more at http://jwt.io
-      console.log(data.token);
+///////////////////////////////////
 
-      // Since the starter app doesn't implement authentication, the server sends
-      // back a randomly generated username for the current client, which is how
-      // they will be identified while sending messages. If your app has a login
-      // system, you should use the e-mail address or username that uniquely identifies
-      // a user instead.
-      console.log(data.identity);
+//NOTE: SendBird Functions
 
-      handler(data);
+///////////////////////////////////
+
+var sb;
+var currentChannel = null;
+
+function connectSendBird(){
+  sb = new SendBird({appId: "B3E1CBF0-0C08-42FB-A967-4817AE8FE95A"});
+}
+
+function connectUser(UserID, NickName){
+  sb.connect(UserID, function(user, error) {});
+}
+
+function updateUser(NickName, Profile_url){
+  sb.updateCurrentUserInfo(NickName, Profile_url, function(response, error) {
+    console.log(response, error);
   });
 }
 
+function createOpenChannel(Channel_name, Cover_url, Data){
+  sb.OpenChannel.createChannel(Channel_name, Cover_url, Data, function (channel, error) {
+    if (error) {
+        console.error(error);
+        return;
+    }
+    console.log(channel);
+    var currentChannel = channel;
+    return channel
+  });
+}
+
+function getOpenChannels(){
+  var openChannelListQuery = sb.OpenChannel.createOpenChannelListQuery();
+  openChannelListQuery.next(function (response, error) {
+    if (error) {
+        console.log(error);
+        return;
+    }
+    console.log(response);
+  });
+}
+
+function enterChannel(Channel_url){
+  sb.OpenChannel.getChannel(Channel_url, function (channel, error) {
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    channel.enter(function(response, error){
+        if (error) {
+            console.error(error);
+            return;
+        }
+        currentChannel = channel;
+    });
+  });
+}
+
+function exitChannel(Channel_url){
+  sb.OpenChannel.getChannel(Channel_url, function (channel, error) {
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    channel.exit(function(response, error){
+        if (error) {
+            console.error(error);
+            return;
+        }
+        currentChannel = null;
+    });
+  });
+}
+
+function loadPreviousMessages(){
+  var messageListQuery = currentChannel.createPreviousMessageListQuery();
+  messageListQuery.load(20, true, function(messageList, error){
+    if (error) {
+        console.error(error);
+        return;
+    }
+    console.log(messageList);
+  });
+}
+
+function loadMoreMessages(message_timestamp){
+  var messageListQuery = channel.createMessageListQuery();
+
+  messageListQuery.prev(message_timestamp, 20, true, function(messageList, error){
+      if (error) {
+          console.error(error);
+          return;
+      }
+      console.log(messageList);
+  });
+}
+
+function sendMessage(Message){
+  currentChannel.sendUserMessage(Message, null, function(message, error){
+    if (error) {
+        console.error(error);
+        return;
+    }
+    console.log(message);
+  });
+}
+
+function connectChannelHandler(){
+  var ChannelHandler = new sb.ChannelHandler();
+
+  ChannelHandler.onMessageReceived = messageReceived;
+
+  sb.addChannelHandler("Study_buddies_handler", ChannelHandler);
+}
+
+function messageReceived(channel, message){
+  console.log(channel, message);
+}
 
 ///////////////////////////////////
 
