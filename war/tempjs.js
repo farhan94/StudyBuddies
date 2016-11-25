@@ -107,7 +107,9 @@ function loadDepartments(university){
     $.ajax(getDepartments).done(function (response) {
       dept_list = response;
       for(var dept in dept_list){
-          var dept_line= "<li class=\'bold\'><a onClick=\"loadCourses(\'" + dept_list[dept].department_uid + "\')\" class=\'waves-effect waves-teal\'>" + dept_list[dept].department_name + "</a></li>"
+          var dept_line= "<li class=\'bold\'><a onClick=\"";
+          dept_line += "loadCourses(\'" + dept_list[dept].department_uid + "\')\" ";
+          dept_line += "class=\'waves-effect waves-teal\'>" + dept_list[dept].department_name + "</a></li>";
           $('#departments #nav-mobile').append(dept_line);
       }
     });
@@ -134,7 +136,9 @@ function loadCourses(department){
   $.ajax(getCourses).done(function (response) {
     course_list = response;
     for(var course in course_list){
-        var course_line= "<li class=\'bold\'><a onClick=\"loadGroups(\'groups\','" + course_list[course].course_uid + "\')\" class=\'waves-effect waves-teal\'>" + course_list[course].course_name + "</a></li>"
+        var course_line= "<li class=\'bold\'><a onClick=\"";
+        course_line += "loadGroups(\'groups\','" + course_list[course].course_uid + "\')\" ";
+        course_line += "class=\'waves-effect waves-teal\'>" + course_list[course].course_name + "</a></li>";
         $('#courses #nav-mobile').append(course_line);
     }
   });
@@ -321,8 +325,6 @@ function loadGroupInfo(group){
 //NOTE: Helper Functions
 
 ///////////////////////////////////
-
-
 
 function isAuthor(message){
   return true;
