@@ -5,11 +5,11 @@
 FrontEnd
 -Events
 --add ajax call for events query and integrate into frontend
--Add area for creating a group
--Add area for creating an event
--Add area for user Settings / Profile
+-Add area for creating a group DONE
+-Add area for creating an event DONE
+-Add area for user Settings / Profile REMOVED
 -Favorite groups
---move your_groups to it's own testLoad
+--move your_groups to it's own testLoad DONE
 
 Backend
 -Servelets

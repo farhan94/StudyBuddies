@@ -76,11 +76,11 @@
 </nav>
 
 <body>
-<% if(user != null ){ 
+<% if(user != null ){
          String id = user.getUserId();
          Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
          StudyBuddiesUser sbu = sbuRef.get();
-         if(sbu != null){ 
+         if(sbu != null){
 
 			if(sbu.getAllGroups() == null){
 
@@ -113,7 +113,7 @@
                             <p class="help-block">You event name can be whatever you'd like it to be</p>
                         </div>
                     </div>
-					 <div class="control-group">
+					          <div class="control-group">
                         <label class="control-label" for="event_location">Event Location</label>
                         <div class="controls">
                             <input type="text" id="event_location" name="event_location" required="true" placeholder="" class="form-control input-lg">
