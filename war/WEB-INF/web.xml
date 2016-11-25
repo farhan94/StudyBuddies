@@ -86,6 +86,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>GroupLeaveServlet</servlet-name>
 			<url-pattern>/leavegroup</url-pattern>
 			</servlet-mapping>
+		<servlet>
+		<servlet-name>GetStudyBuddiesUserServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetStudyBuddiesUserServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetStudyBuddiesUserServlet</servlet-name>
+			<url-pattern>/getsbu</url-pattern>
+			</servlet-mapping>
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->
