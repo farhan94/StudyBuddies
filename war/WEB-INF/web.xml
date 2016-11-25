@@ -94,6 +94,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>GetStudyBuddiesUserServlet</servlet-name>
 			<url-pattern>/getsbu</url-pattern>
 			</servlet-mapping>
+		<servlet>
+		<servlet-name>GetAllUserEventsServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetAllUserEventsServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetAllUserEventsServlet</servlet-name>
+			<url-pattern>/geteventsforuser</url-pattern>
+			</servlet-mapping>
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->
