@@ -8,7 +8,7 @@
 
 TEST_MODE = false;
 
-
+User = {Name: "Ralf", Email: "", University: 0000}
 
 
 ///////////////////////////////////
@@ -71,6 +71,18 @@ function toggleElement(element){
   }
 }
 
+var timestampCheck;
+
+function onMessageScroll(){
+  if($("#messaging").scrollTop() == 0){
+    console.log("Time to scroll")
+    if(timestampCheck != oldestTimestamp){
+      loadMoreMessages();
+      timestampCheck = oldestTimestamp;
+    }
+  }
+}
+
 ///////////////////////////////////
 
 //NOTE: Load Functions
@@ -82,8 +94,9 @@ function loadMessages(group){
     hideElement(element_list[i]);
   }
   hideElement("background");
+  findOpenChannel("Study_group_" + group);
   showElement("messaging"); //TODO: change this to update from groupID
-  updateScroll();
+  $('#messaging li').empty();
 }
 
 function loadDepartments(university){
@@ -171,6 +184,30 @@ function loadGroups(groups_type, course){
   }
 }
 
+function loadGroupInfo(group){
+  //do some logic to get group information for given uid
+
+  var group
+  if(TEST_MODE){
+    group = dummy_group;
+  }
+  var getGroupInfo = {
+          "async": true,
+          "crossDomain": true,
+          "url": "/getgroupinfo?groupID=" + group,
+          "method": "GET",
+          "headers": {
+            "cache-control": "no-cache",
+            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+          }
+        }
+    $.ajax(getGroupInfo).done(function (response) {
+        enterChannel(response.uid);
+        updateGroupInfo(response);
+    });
+  showElement("group_info");
+}
+
 function loadNotifications(notification_type, uid){
   var notifications_list;
   if(TEST_MODE){
@@ -209,25 +246,44 @@ function loadEvents(event_type, uid){
 
 ///////////////////////////////////
 
-function submitMessage(){
-  var message = {};
-  message.text = $('#message_input #icon_prefix')[0].value;
-  if(message.text == "") {return;}
-  if(addMessage(message)){
-    $('#message_input #icon_prefix')[0].value = "";
-  }else{
-    //TODO: Message did not send
+var oldestTimestamp = Number.MAX_VALUE;
+
+function isAuthor(message){
+  if(message.sender.nickname == User.Name){
+    return true;
   }
+  return false;
 }
 
-function addMessage(message){
-  var color = isAuthor(message) ? "teal" : "blue-grey"
-  var message_line = "<li class=\"message-right\"><div class=\"card " + color + " lighten-3 message text-right\">";
-  message_line += "<div class=\"card-content white-text\"><p>" + message.text;
-  message_line += "</p></div></div></li>";
-  $('#messaging ul').append(message_line);
+function submitMessage(){
+  var message = {};
+  message.message = $('#message_input #icon_prefix')[0].value; //get user input
+  if(message.message == "") {return;}
+  addMessage(message, true, true);
+  sendMessage(message.message);
+  $('#message_input #icon_prefix')[0].value = ""; // clean user input
   updateScroll();
-  return true;
+}
+
+function addMessage(message, knownOwner, atFront){
+  var color = "teal";
+  var ownerStyle = " class=\"message-right\"";
+  var name = "You";
+  if(!knownOwner){
+    if(!isAuthor(message)){
+      ownerStyle = "";
+      color = "blue-grey";
+      name = message.sender.nickname;
+    }
+  }
+  var message_line = "<li" + ownerStyle + "><div class=\"card " + color + " lighten-3 message text-right\">";
+  message_line += "<div class=\"card-content white-text\"><p><strong>" + name + ": </strong>" + message.message;
+  message_line += "</p></div></div></li>";
+  if(atFront){
+    $('#messaging ul').append(message_line);
+  }else{
+    $('#messaging ul').prepend(message_line);
+  }
 }
 
 function addGroup(groups_type, group){
@@ -266,59 +322,39 @@ function addEvent(event_type, event_item){
   $('#' + event_type + ' #nav-mobile').append(event_line);
 }
 
-
-
-function loadGroupInfo(group){
-  //do some logic to get group information for given uid
-
-  var group
-  if(TEST_MODE){
-    group = dummy_group;
+function updateGroupInfo(group){
+  var group_icon_url = group.icon_url;
+  var group_name = group.name;
+  var isMember = group.is_member;
+  var group_purpose = group.purpose;
+  var group_new_notifications = 4;
+  var group_new_messages = 3;
+  var group_events = 5;
+  $('#group_info #nav-mobile img')[0].src = group_icon_url;
+  $('#group_info #nav-mobile #name')[0].textContent = group_name;
+  $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
+  $('#group_info #nav-mobile #joinleavebtn')[0].remove();
+  if(!isMember){
+    $('#group_info #nav-mobile #notifications')[0].style.display = "none";
+    $('#group_info #nav-mobile #messages')[0].style.display = "none";
+    $('#group_info #nav-mobile #events')[0].style.display = "none";
+    $('#group_info #nav-mobile #settings')[0].style.display = "none";
+  }else{
+    $('#group_info #nav-mobile')[0].style.display = "flex";
+    $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
+    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
+    $('#group_info #nav-mobile #messages a')[0].setAttribute("onclick", "loadMessages(" + group.uid + ")");
+    $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
+    $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
+    $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + group.uid + ")");
   }
-  var getGroupInfo = {
-          "async": true,
-          "crossDomain": true,
-          "url": "/getgroupinfo?groupID=" + group,
-          "method": "GET",
-          "headers": {
-            "cache-control": "no-cache",
-            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
-          }
-        }
-    $.ajax(getGroupInfo).done(function (response) {
-      group = response;
-    	  var group_icon_url = group.icon_url;
-    	  var group_name = group.name;
-    	  var isMember = group.is_member;
-    	  var group_purpose = group.purpose;
-    	  var group_new_notifications = 4;
-    	  var group_new_messages = 3;
-    	  var group_events = 5;
-    	  $('#group_info #nav-mobile img')[0].src = group_icon_url;
-    	  $('#group_info #nav-mobile #name')[0].textContent = group_name;
-    	  $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
-    	  $('#group_info #nav-mobile #joinleavebtn')[0].remove();
-    	  if(!isMember){
-    	    $('#group_info #nav-mobile #notifications')[0].style.display = "none";
-    	    $('#group_info #nav-mobile #messages')[0].style.display = "none";
-    	    $('#group_info #nav-mobile #events')[0].style.display = "none";
-    	    $('#group_info #nav-mobile #settings')[0].style.display = "none";
-    	  }else{
-    	    $('#group_info #nav-mobile')[0].style.display = "flex";
-    	    $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
-    	    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
-    	    $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
-    	    $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
-    	    $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + group.uid + ")");
-    	  }
-    	  var color = isMember ? "red" : "";
-    	  var join_or_leave = isMember ? "Leave" : "Join";
+  var color = isMember ? "red" : "";
+  var join_or_leave = isMember ? "Leave" : "Join";
 
-    	  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
-    	  $('#group_info #nav-mobile').append(btn);
-    });
-  showElement("group_info");
+  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
+  $('#group_info #nav-mobile').append(btn);
 }
+
 
 ///////////////////////////////////
 
@@ -326,9 +362,6 @@ function loadGroupInfo(group){
 
 ///////////////////////////////////
 
-function isAuthor(message){
-  return true;
-}
 
 ///////////////////////////////////
 
@@ -341,6 +374,7 @@ var currentChannel = null;
 
 function connectSendBird(){
   sb = new SendBird({appId: "B3E1CBF0-0C08-42FB-A967-4817AE8FE95A"});
+  connectUser(0000,"Ralf"); //TODO: change to fit user data
 }
 
 function connectUser(UserID, NickName){
@@ -353,33 +387,51 @@ function updateUser(NickName, Profile_url){
   });
 }
 
-function createOpenChannel(Channel_name, Cover_url, Data){
-  sb.OpenChannel.createChannel(Channel_name, Cover_url, Data, function (channel, error) {
-    if (error) {
-        console.error(error);
-        return;
-    }
-    console.log(channel);
-    var currentChannel = channel;
-    return channel
-  });
-}
-
-function getOpenChannels(){
+function findOpenChannel(channel_name){
   var openChannelListQuery = sb.OpenChannel.createOpenChannelListQuery();
   openChannelListQuery.next(function (response, error) {
     if (error) {
         console.log(error);
         return;
     }
+    console.log("Open Channels:: ");
     console.log(response);
+    enterChannelbyName(response, channel_name)
   });
 }
 
-function enterChannel(Channel_url){
-  sb.OpenChannel.getChannel(Channel_url, function (channel, error) {
+function enterChannelbyName(channel_list, channel_name){
+  var channel_url = null;
+  for(i = 0; i < channel_list.length; i++){
+    if(channel_list[i].name == channel_name){
+      channel_url = channel_list[i].url;
+      break;
+    }
+  }
+  if(channel_url == null){
+    createOpenChannel(channel_name)
+  }else{
+    enterChannelbyURL(channel_url);
+  }
+}
+
+function createOpenChannel(Channel_name){
+  Cover_url = null;
+  sb.OpenChannel.createChannel(Channel_name, Cover_url, null, function (channel, error) {
     if (error) {
         console.error(error);
+        return;
+    }
+    console.log("Channel created:: ");
+    console.log(channel);
+    enterChannelbyURL(channel.url);
+  });
+}
+
+function enterChannelbyURL(Channel_url){
+  sb.OpenChannel.getChannel(Channel_url, function (channel, error) {
+    if (error) {
+        console.log(error);
         return;
     }
 
@@ -388,8 +440,12 @@ function enterChannel(Channel_url){
             console.error(error);
             return;
         }
-        currentChannel = channel;
+        console.log(response);
     });
+    console.log("Enter Channel:: ");
+    console.log(channel);
+    currentChannel = channel;
+    loadPreviousMessages();
   });
 }
 
@@ -418,18 +474,34 @@ function loadPreviousMessages(){
         return;
     }
     console.log(messageList);
+    var length = messageList.length - 1;
+    while(length >= 0){
+      var message = messageList[length];
+      addMessage(message, false, true);
+      oldestTimestamp = (oldestTimestamp > message.createdAt) ? message.createdAt : oldestTimestamp;
+      length--;
+    }
+    updateScroll();
+    connectChannelHandler();
   });
 }
 
-function loadMoreMessages(message_timestamp){
-  var messageListQuery = channel.createMessageListQuery();
+function loadMoreMessages(){
+  var messageListQuery = currentChannel.createMessageListQuery();
 
-  messageListQuery.prev(message_timestamp, 20, true, function(messageList, error){
+  messageListQuery.prev(oldestTimestamp, 5, true, function(messageList, error){
       if (error) {
           console.error(error);
           return;
       }
       console.log(messageList);
+      var length = messageList.length - 1;
+      while(length >= 0){
+        var message = messageList[length];
+        addMessage(message, false, false);
+        oldestTimestamp = (oldestTimestamp > message.createdAt) ? message.createdAt : oldestTimestamp;
+        length--;
+      }
   });
 }
 
@@ -453,6 +525,8 @@ function connectChannelHandler(){
 
 function messageReceived(channel, message){
   console.log(channel, message);
+  addMessage(message, false, true);
+  updateScroll();
 }
 
 ///////////////////////////////////
