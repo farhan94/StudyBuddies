@@ -140,7 +140,7 @@ public class StudyBuddiesUser {
     }
     
     public ArrayList<Ref<GroupMember>> getAllGroups(){
-    	if(groupsJoined == null && MyGroups == null){
+    	if(groupsJoined != null && MyGroups == null){
     		return null;
     	}
     	else{
@@ -192,6 +192,22 @@ public class StudyBuddiesUser {
 //    	return gm;
     }
 
+    public boolean leaveGroup(Group g){
+    	ArrayList<Ref<GroupMember>> aList = this.getAllGroups();
+    	if(aList != null){
+    	Iterator<Ref<GroupMember>> i = aList.iterator();
+    	while(i.hasNext()){
+    		Ref<GroupMember> gmRef = i.next();
+    		gmRef = ofy().load().ref(gmRef);
+    		GroupMember gm = gmRef.get();
+    		if(g.getId() == gm.getGroup().getId()){
+    			i.remove();
+    			return true;
+    		}
+    		
+    	}}
+    	return false;
+    }
 
 
 

@@ -38,6 +38,7 @@ public class Group{
 		this.groupName = name;
 		this.currentSize = 0;
 		this.maxSize = maxSize;
+		this.joinByRequest = joinByRequest;
 		this.events = new ArrayList<Ref<Event>>();
 		this.members = new ArrayList<Ref<GroupMember>>();
 	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
@@ -46,8 +47,51 @@ public class Group{
 	public String getGroupDescription(){
 		return this.groupDescription;
 	}
+	public boolean containsSBU(Ref<StudyBuddiesUser> sbuRef){
+		if(members != null){
+			Iterator<Ref<GroupMember>> i = members.iterator();
+			while(i.hasNext()){
+				Ref<GroupMember> gmRef = i.next();
+				gmRef = ofy().load().ref(gmRef);
+				GroupMember gm = gmRef.get();
+				if(gm.getUser().getId() == sbuRef.getValue().getId()){
+					return true;
+				}
+				
+			}
+		}
+		if(ownerRef.get().getUser().getId() == sbuRef.get().getId()){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean removeSBU(Ref<StudyBuddiesUser> sbuRef){
+		if(members != null){
+			Iterator<Ref<GroupMember>> i = members.iterator();
+			while(i.hasNext()){
+				Ref<GroupMember> gmRef = i.next();
+				gmRef = ofy().load().ref(gmRef);
+				GroupMember gm = gmRef.get();
+				if(gm.getUser().getId() == sbuRef.getValue().getId()){
+					StudyBuddiesUser sbu = sbuRef.get();
+					sbu.leaveGroup(gm.getGroup());
+					ofy().save().entity(sbu).now();
+					i.remove();
+					return true;
+				}
+				
+			}
+		}
+		if(ownerRef.get().getUser().getId() == sbuRef.get().getId()){
+			return true;
+		}
+		return false;
+	}
 	public Long getId(){ return id;}
-
+	public boolean isJoinByRequest(){
+		return this.joinByRequest;
+	}
     public String getGroupName() { return groupName; }
     public void setGroupName(String name) { groupName = name; }
 
