@@ -42,7 +42,7 @@
                   </li>
               </ul>
           </li>
-          <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li>
+          <!-- <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li> -->
           <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal"><span class="new badge">1</span>Events</a></li>
           <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
           <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li> -->
@@ -392,13 +392,13 @@
         </div>
         <div class="input-field">
           <p>
-            <input type="checkbox" id="test5" />
-            <label for="test5">Private Group</label>
+            <input type="checkbox" id="creategroup_private" />
+            <label for="creategroup_private">Private Group</label>
           </p>
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Group</a>
+        <a onClick="submitNewGroup()" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Group</a>
       </div>
     </div>
     <div id="modal2" class="modal">
@@ -410,7 +410,7 @@
         </div>
         <div class="input-field">
           <i class="material-icons prefix">subject</i>
-          <input required placeholder="Ex: Study Session for Final" id="createevent_event_description" type="text" class="validate">
+          <input placeholder="Ex: Study Session for Final" id="createevent_event_description" type="text" class="validate">
           <label for="createevent_event_description">Event Description</label>
         </div>
         <div class="input-field">
@@ -426,7 +426,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
+        <a onClick="submitNewEvent()" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
       </div>
     </div>
   </body>

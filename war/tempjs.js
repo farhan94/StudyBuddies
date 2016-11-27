@@ -224,20 +224,32 @@ function loadNotifications(notification_type, uid){
   }
 }
 
-function loadEvents(event_type, uid){
+function loadEvents(event_type, group_uid){
   var event_list;
-  if(TEST_MODE){
-    event_list = dummy_event_list;
-  }
-  else if(event_type == "global_event_list"){
-    //do some logic to get list of all events
+  var url;
+  if(event_type == "group_event_list"){
+    url = "/getevents?groupID=" + group_uid;
   }else{
-    //do some logic to get list of events for given group
+    url = "/geteventsforuser";
   }
   showElement(event_type);
-  for(var event_item in event_list){
-      addEvent(event_type, event_item);
-  }
+  $("#" + event_type + " li").not('li:first').empty()
+  var getGroups = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(getGroups).done(function (response) {
+    event_list = response;
+    for(var eventIndex in event_list){
+        addEvent(event_type, event_list[eventIndex]);
+    }
+  });
 }
 
 ///////////////////////////////////
@@ -322,7 +334,10 @@ function addEvent(event_type, event_item){
   $('#' + event_type + ' #nav-mobile').append(event_line);
 }
 
+var currentGroup;
+
 function updateGroupInfo(group){
+  currentGroup = group.uid;
   var group_icon_url = group.icon_url;
   var group_name = group.name;
   var isMember = group.is_member;
@@ -350,18 +365,99 @@ function updateGroupInfo(group){
   }
   var color = isMember ? "red" : "";
   var join_or_leave = isMember ? "Leave" : "Join";
+  var onClickAction = isMember ? "onClick=\"leaveGroup(" + group_uid + ")\"" : "onClick=\"joinGroup(" + group_uid + ")\"";
 
-  var btn = "<li id=\"joinleavebtn\"><a class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
+  var btn = "<li id=\"joinleavebtn\"><a " + onClickAction + " class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
   $('#group_info #nav-mobile').append(btn);
 }
 
 
 ///////////////////////////////////
 
-//NOTE: Helper Functions
+//NOTE: Extra Functions
 
 ///////////////////////////////////
 
+function joinGroup(group_uid){
+  var createEvent = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/joingroup?groupID=" + group_uid,
+        "method": "POST",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(createEvent).done(function (response) {
+  });
+}
+
+function leaveGroup(group_uid){
+  var createEvent = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/leavegroup?groupID=" + group_uid,
+        "method": "POST",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(createEvent).done(function (response) {
+  });
+}
+
+function submitNewEvent(){
+  var name = $("#createevent_event_name")[0].value;
+  var description = $("#createevent_event_description")[0].value;
+  var location = $("#createevent_location")[0].value;
+  var date = $("#createevent_date")[0].value;
+  //var time = $("#createevent_time")[0].value
+  var url = "/eventcreate?event_name=" + name + "&event_description=" + description;
+  url += "&event_location=" + location  + "&event_date=" + date; + "&group=" + currentGroup;
+  console.log(url);
+  var createEvent = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "POST",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(createEvent).done(function (response) {
+  });
+}
+
+function submitNewGroup(){
+  var name = $("#creategroup_group_name")[0].value;
+  var description = $("#creategroup_group_description")[0].value;
+  var department = $("#creategroup_department")[0].value;
+  var course_id = $("#creategroup_course_id")[0].value;
+  var course_name = $("#creategroup_course_name")[0].value;
+  var professor = $("#creategroup_professor")[0].value;
+  var max_size = $("#creategroup_maxsize")[0].value;
+  var isPrivate= $("#creategroup_private")[0].value;
+  //var time = $("#createevent_time")[0].value
+  var url = "/groupcreate?group_name=" + name + "&group_description=" + description;
+  url += "&department_name=" + department  + "&courseId=" + course_id + "&course_name=" + course_name;
+  url += "&professor=" + professor + "&max_size=" + max_size + "&join_by_request=" + isPrivate;
+  console.log(url);
+  var createEvent = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "POST",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(createEvent).done(function (response) {
+  });
+}
 
 ///////////////////////////////////
 
