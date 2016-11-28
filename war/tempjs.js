@@ -202,7 +202,6 @@ function loadGroupInfo(group){
           }
         }
     $.ajax(getGroupInfo).done(function (response) {
-        enterChannel(response.uid);
         updateGroupInfo(response);
     });
   showElement("group_info");
@@ -365,7 +364,7 @@ function updateGroupInfo(group){
   }
   var color = isMember ? "red" : "";
   var join_or_leave = isMember ? "Leave" : "Join";
-  var onClickAction = isMember ? "onClick=\"leaveGroup(" + group_uid + ")\"" : "onClick=\"joinGroup(" + group_uid + ")\"";
+  var onClickAction = isMember ? "onClick=\"leaveGroup(" + group.uid + ")\"" : "onClick=\"joinGroup(" + group.uid + ")\"";
 
   var btn = "<li id=\"joinleavebtn\"><a " + onClickAction + " class=\"waves-effect " + color + " waves-light btn\">" + join_or_leave + " Group</a></li>";
   $('#group_info #nav-mobile').append(btn);
@@ -415,7 +414,7 @@ function submitNewEvent(){
   var date = $("#createevent_date")[0].value;
   //var time = $("#createevent_time")[0].value
   var url = "/eventcreate?event_name=" + name + "&event_description=" + description;
-  url += "&event_location=" + location  + "&event_date=" + date; + "&group=" + currentGroup;
+  url += "&event_location=" + location  + "&event_date=" + date + "&group=" + currentGroup;
   console.log(url);
   var createEvent = {
         "async": true,

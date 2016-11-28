@@ -20,7 +20,7 @@ public class Event {
     // int currentSize;            // Current number of members not including the owner
 	// int maxSize;                // Max number of members not including the owner
     String date;
-
+    boolean notificationSent;
 	@Load Ref<Group> group;
 	
 	 private Event(){}
@@ -31,6 +31,7 @@ public class Event {
 			this.eventLocation = location;
 			this.eventDiscription = description;
 			this.date = date; //yyyy -mm -dd
+			this.notificationSent = false;
 			// this.eventSize = 0;
 			// this.maxSize = maxSize;
 		//	this.course = Ref.create(Key.create(Course.class, course.getId()));
@@ -38,7 +39,9 @@ public class Event {
 
 
 		public Long getId(){ return id;}
-
+		public boolean isNotificationSent(){
+			return this.notificationSent;
+		}
 	    public String getEventName() { return eventName; }
 	    public void setEventName(String name) { eventName = name; }
 	    public String getEventDescription(){

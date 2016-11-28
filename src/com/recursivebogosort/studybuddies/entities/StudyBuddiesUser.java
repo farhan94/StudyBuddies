@@ -129,6 +129,9 @@ public class StudyBuddiesUser {
     	upcomingEvents.add(event);
     }
     public ArrayList<Ref<Event>> getEvents(){
+    	if (this.upcomingEvents == null){
+    		this.upcomingEvents = new ArrayList<Ref<Event>>();
+    	}
     	return this.upcomingEvents;
     }
     public void joinGroup(Ref<GroupMember> groupToJoin){

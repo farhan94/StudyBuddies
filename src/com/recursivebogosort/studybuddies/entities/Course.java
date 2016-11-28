@@ -58,6 +58,13 @@ public class Course {
 
     }
 
+    public Course(String courseId, String courseName, String professor, String universityName, String departmentName, boolean isTest) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.professor = professor;
+        this.universityName = universityName;
+        this.departmentName = departmentName;
+    }
     public Long getId() { return id; }
 
     public String getCourseId() {
