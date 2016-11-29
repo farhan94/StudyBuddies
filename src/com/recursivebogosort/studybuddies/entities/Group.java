@@ -32,15 +32,28 @@ public class Group{
 
     private Group(){}
 
-	private Group(String name, int maxSize, Course course, boolean joinByRequest,
+	public Group(String name, String description, int maxSize, Course course, boolean joinByRequest,
 			StudyBuddiesUser owner) {
 		super();
 		this.groupName = name;
+		this.groupDescription = description;
 		this.currentSize = 0;
 		this.maxSize = maxSize;
 		this.joinByRequest = joinByRequest;
 		this.events = new ArrayList<Ref<Event>>();
 		this.members = new ArrayList<Ref<GroupMember>>();
+	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
+    }
+	
+	public Group(String name, String description, int maxSize, boolean joinByRequest, boolean isTest) {
+		super();
+		this.groupName = name;
+		this.groupDescription = description;
+		this.currentSize = 0;
+		this.maxSize = maxSize;
+		this.joinByRequest = joinByRequest;
+		//this.events = new ArrayList<Ref<Event>>();
+		//this.members = new ArrayList<Ref<GroupMember>>();
 	//	this.course = Ref.create(Key.create(Course.class, course.getId()));
     }
 
@@ -147,9 +160,9 @@ public class Group{
         //TODO
     }
 
-    public static Group CreateGroup(String name, int maxSize, Course course, boolean joinByRequest, StudyBuddiesUser user)
+    public static Group CreateGroup(String name, String description, int maxSize, Course course, boolean joinByRequest, StudyBuddiesUser user)
     {
-        Group group = new Group(name, maxSize, course, joinByRequest, user);
+        Group group = new Group(name, description, maxSize, course, joinByRequest, user);
         Key<Group> groupKey = ofy().save().entity(group).now();
         GroupOwner groupOwner =  new GroupOwner(ofy().load().type(StudyBuddiesUser.class).id(user.getId()), ofy().load().key(groupKey));
         Key<GroupOwner> groupOwnerKey = ofy().save().entity(groupOwner).now();

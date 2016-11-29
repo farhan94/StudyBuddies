@@ -32,8 +32,6 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">ABOUT</a></li>
-        <li><a href="#">FEATURES</a></li>
         <%
       	ObjectifyService.register(StudyBuddiesUser.class);
     	UserService userService = UserServiceFactory.getUserService();
@@ -60,7 +58,7 @@
 <body>
 
 <div class="jumbotron jumbotron3 text-center">
-  <h2>So you want to create your own group?</h2>
+  <h2>So you want to join?</h2>
   <p>Fill out this form and we will make it happen!</p>
 </div>
 <div class="container">
@@ -93,8 +91,8 @@
             <div class="controls">
               <select id = "university" name="university" required="" class="form-control input-lg">
                 <option value="" selected>Select your University</option>
-                <option value="Something">Something</option>
-                <option value="Something Else">Something Else</option>
+                <option value="UTAustin">The University of Texas at Austin</option>
+                <option value="ACC">Austin Community College</option>
               </select>
             </div>
           </div>

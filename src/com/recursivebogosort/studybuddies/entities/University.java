@@ -1,8 +1,5 @@
 package com.recursivebogosort.studybuddies.entities;
 
-/**
- * Created by ryan on 11/7/16.
- */
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;

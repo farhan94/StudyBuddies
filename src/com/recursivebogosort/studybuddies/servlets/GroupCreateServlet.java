@@ -19,9 +19,7 @@ import java.io.IOException;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-/**
- * Created by ryan on 11/8/16.
- */
+
 public class GroupCreateServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -102,7 +100,7 @@ public class GroupCreateServlet extends HttpServlet {
            // System.out.println(courseRef.getValue().getUniversity().getName());
         }
         
-        Group group = Group.CreateGroup(groupName, maxSize, courseRef.getValue(), joinByRequest, sbu);
+        Group group = Group.CreateGroup(groupName, groupDescription, maxSize, courseRef.getValue(), joinByRequest, sbu);
 
         resp.sendRedirect("/dashboard.jsp");
 

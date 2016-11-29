@@ -43,6 +43,12 @@ public class Department {
         this.universityRef = universityRef;
         this.courses = new ArrayList<Ref<Course>>();
     }
+    public Department (String departmentName, String universityName, boolean isTest)
+    {
+    	id = departmentName+universityName;
+        this.departmentName = departmentName;
+        this.universityName = universityName;
+    }
 
     public Collection<Course> getCourses(){
     	return ofy().load().refs(this.courses).values();

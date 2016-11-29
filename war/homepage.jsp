@@ -31,8 +31,6 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">ABOUT</a></li>
-        <li><a href="#">FEATURES</a></li>
         <%
 	    	UserService userService = UserServiceFactory.getUserService();
 	    	User user = userService.getCurrentUser();
@@ -67,17 +65,17 @@
     <div class="col-sm-4">
       <h4>Dashboard</h4>
       <p>The most important information, right where you need it.</p>
-      <img src="" class="img-responsive" style="width:100%" alt="Image">
+      <img src="images/homepage/dash.jpg" class="img-responsive" style="width:100%" alt="Image">
     </div>
     <div class="col-sm-4">
       <h4>Notifications</h4>
-      <p>Stay updated on study group events with text message notifications, sent using Twilio.</p>
+      <p>Stay updated on study group events with email notifications, sent using Sendgrid.</p>
       <img src="images/homepage/sms.jpg" class="img-responsive" style="width:100%" alt="Image">
     </div>
     <div class="col-sm-4">
       <h4>In Group Messaging</h4>
       <p>All your group messages, easily accessible.</p>
-      <img src="" class="img-responsive" style="width:100%" alt="Image">
+      <img src="images/homepage/msg.jpg" class="img-responsive" style="width:100%" alt="Image">
     </div>
   </div>
 </div>
