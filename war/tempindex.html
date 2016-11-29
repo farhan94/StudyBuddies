@@ -15,6 +15,13 @@
       <!-- Compiled and minified JavaScript -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
     <title>Study Buddies</title>
+    <link rel='shortcut icon' type='image/x-icon' href='http://www.euiwonkim.com/images/studybuddy.png' />
+    <user style="display:none;">
+      <name id="user_name">Name</name>
+      <uid id="user_uid">0000</uid>
+      <email id="user_email">0000@aaaa.bbb</email>
+      <university id="user_university">University</university>
+    </user>
   </head>
   <body style="display:flex;flex-direction:row;height:100%;">
       <ul id="nav-mobile" class="side-nav fixed z-depth-4" style="transform: translateX(0%); width: 20%;z-index:999;">
@@ -27,9 +34,9 @@
           </li>
           <li class="bold"><a onClick="hideAll()" class="waves-effect waves-teal">Home</a></li>
           <li class="bold"><a class="waves-effect waves-teal" href="#modal1">Create a Group</a></li>
-          <li class="bold"><a onclick="findGroups('Something')" class="waves-effect waves-teal">Find a Group</a></li>
-          <li class="bold" onClick="yourGroups()"><span class="badge">3</span><a href="#">Your Groups</a></li>
-          <li class="no-padding">
+          <li class="bold"><a onclick="findGroups()" class="waves-effect waves-teal">Find a Group</a></li>
+          <li class="bold" onClick="yourGroups()"><a href="#">Your Groups</a></li>
+          <!-- <li class="no-padding">
               <ul class="collapsible collapsible-accordion">
                   <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Favorite Groups</a>
                       <div class="collapsible-body">
@@ -41,9 +48,9 @@
                       </div>
                   </li>
               </ul>
-          </li>
+          </li> -->
           <!-- <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li> -->
-          <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal"><span class="new badge">1</span>Events</a></li>
+          <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal">Events</a></li>
           <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
           <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li> -->
           <li><a class="waves-effect waves-light btn">Logout</a></li>
@@ -308,10 +315,11 @@
         <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:999;">
           <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="group_icon" style="width:80%;height:30%;">
           <li id="name" class="bold" style="align-self: center;">Study Group 1</li>
-          <li id="purpose" class="bold" style="align-self: center;">Purpose</a></li>
-          <li id="notifications"class="bold"><a onClick="loadNotifications('group_notification_list', null)" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li>
-          <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal"><span id="badge" class="new badge">3</span>Messages</a></li>
-          <li id="events"class="bold"><a onClick="loadEvents('group_event_list', null);" class="waves-effect waves-teal"><span id="badge" class="badge">5</span>Events</a></li>
+          <li id="purpose" class="bold"style="align-self: center;">Description</li>
+          <li id="members" class="bold"><a onClick="loadMembers()" style="align-self: center;" href="#modal3">Group Members</a></li>
+          <!-- <li id="notifications"class="bold"><a onClick="loadNotifications('group_notification_list', null)" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li> -->
+          <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal">Messages</a></li>
+          <li id="events"class="bold"><a onClick="loadEvents('group_event_list', null);" class="waves-effect waves-teal">Events</a></li>
           <li id="create_event"class="bold"><a class="waves-effect waves-teal" href="#modal2">Create Event</a></li>
           <li id="joinleavebtn"><a class="waves-effect waves-light btn">Join/Leave Group</a></li>
         </ul>
@@ -426,7 +434,20 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a onClick="submitNewEvent()" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
+        <a onClick="submitNewEvent()" class="modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
+      </div>
+    </div>
+    <div id="modal3" class="modal">
+      <div class="modal-content">
+        <div class="collection-header"><h4>Group Members</h4></div>
+        <ul id="collection" class="collection with-header">
+          <li href="#!" class="collection-item">Name</li>
+          <li href="#!" class="collection-item">Name</li>
+          <li href="#!"class="collection-item">Name</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
       </div>
     </div>
   </body>

@@ -8,8 +8,9 @@
 
 TEST_MODE = false;
 
-User = {Name: "Ralf", Email: "", University: 0000}
+var User = {Name: "Name", Uid: 0000, Email: "Email", University: 0000}
 
+var element_list = ["group_info", "messaging","global_notification_list","global_event_list","your_groups","departments","courses","groups","group_notification_list","group_event_list"];
 
 ///////////////////////////////////
 
@@ -24,10 +25,17 @@ $(document).ready(function(){
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15 // Creates a dropdown of 15 years to control year
     });
+    getUserInfo();
     connectSendBird();
  });
 
-var element_list = ["group_info", "messaging","global_notification_list","global_event_list","your_groups","departments","courses","groups","group_notification_list","group_event_list"];
+ function getUserInfo(){
+   User.Name = $("User name")[0].outerText;
+   User.Uid = $("User uid")[0].outerText;
+   User.Email = $("User email")[0].outerText;
+   User.University = $("User university")[0].outerText;
+   $('#background h2')[0].textContent = "Hi " + User.Name + ",";
+ }
 
 function hideAll(){
   for (var element in element_list){
@@ -36,14 +44,9 @@ function hideAll(){
   showElement("background");
 }
 
-function findGroups(University){
+function findGroups(){
   hideAll();
-  loadDepartments(University);
-}
-
-function updateScroll(){
-    var element = document.getElementById("messaging");
-    element.scrollTop = element.scrollHeight;
+  loadDepartments(User.University);
 }
 
 function yourGroups(){
@@ -74,13 +77,21 @@ function toggleElement(element){
 var timestampCheck;
 
 function onMessageScroll(){
-  if($("#messaging").scrollTop() == 0){
+  var element = document.getElementById("messaging");
+  if(element.scrollTop == 0){
     console.log("Time to scroll")
+    var oldHeight = element.scrollHeight;
     if(timestampCheck != oldestTimestamp){
       loadMoreMessages();
+      element.scrollTop = element.scrollHeight - oldHeight;
       timestampCheck = oldestTimestamp;
     }
   }
+}
+
+function updateScroll(){
+    var element = document.getElementById("messaging");
+    element.scrollTop = element.scrollHeight;
 }
 
 ///////////////////////////////////
@@ -160,28 +171,25 @@ function loadCourses(department){
 function loadGroups(groups_type, course){
   var group_list;
   if(TEST_MODE){ group_list = dummy_group_list; }
-  $('#' + groups_type + ' #nav-mobile #collection').empty()
+  $('#' + groups_type + ' #nav-mobile li').not('li:first').empty()
   showElement(groups_type);
-  if(course != null){
-    var getCourseGroups = {
-          "async": true,
-          "crossDomain": true,
-          "url": "/getgroupbycourse?courseID=" + course,
-          "method": "GET",
-          "headers": {
-            "cache-control": "no-cache",
-            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
-          }
+  var url = (groups_type == "your_groups") ? ("/getusergroups") : ("/getgroupbycourse?courseID=" + course);
+  var getGroups = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
         }
-    $.ajax(getCourseGroups).done(function (response) {
-      group_list = response;
-      for(var group in group_list){
-          addGroup(groups_type, group_list[group]);
       }
-    });
-  }else{
-    //TODO: get groups for user
-  }
+  $.ajax(getGroups).done(function (response) {
+    group_list = response;
+    for(var group in group_list){
+        addGroup(groups_type, group_list[group]);
+    }
+  });
 }
 
 function loadGroupInfo(group){
@@ -251,6 +259,28 @@ function loadEvents(event_type, group_uid){
   });
 }
 
+function loadMembers(){
+  console.log("load the members");
+  $('#modal3 ul').empty()
+  var url = "";
+  var getMembers = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        "headers": {
+          "cache-control": "no-cache",
+          "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+        }
+      }
+  $.ajax(getMembers).done(function (response) {
+    var member_list = response;
+    for(var memberIndex in member_list){
+        addMember(member_list[memberIndex]);
+    }
+  });
+}
+
 ///////////////////////////////////
 
 //NOTE: Add Single Item Functions
@@ -258,6 +288,12 @@ function loadEvents(event_type, group_uid){
 ///////////////////////////////////
 
 var oldestTimestamp = Number.MAX_VALUE;
+
+function addMember(member){
+  var name = member.name;
+  var member_line = "<li href=\"#!\" class=\"collection-item\">" + name + "</li>";
+  $('#modal3 ul').append(member_line);
+}
 
 function isAuthor(message){
   if(message.sender.nickname == User.Name){
@@ -288,7 +324,7 @@ function addMessage(message, knownOwner, atFront){
     }
   }
   var message_line = "<li" + ownerStyle + "><div class=\"card " + color + " lighten-3 message text-right\">";
-  message_line += "<div class=\"card-content white-text\"><p><strong>" + name + ": </strong>" + message.message;
+  message_line += "<div class=\"card-content white-text\"><p><strong style=\"color:teal;\">" + name + ": </strong>" + message.message;
   message_line += "</p></div></div></li>";
   if(atFront){
     $('#messaging ul').append(message_line);
@@ -307,8 +343,8 @@ function addGroup(groups_type, group){
     var group_line = "<li onClick=\"loadGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
     group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
-    group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div>";
-    group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
+    group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
+    // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
     $('#' + groups_type + ' #nav-mobile #collection').append(group_line);
 }
 
@@ -341,25 +377,22 @@ function updateGroupInfo(group){
   var group_name = group.name;
   var isMember = group.is_member;
   var group_purpose = group.purpose;
-  var group_new_notifications = 4;
-  var group_new_messages = 3;
-  var group_events = 5;
   $('#group_info #nav-mobile img')[0].src = group_icon_url;
   $('#group_info #nav-mobile #name')[0].textContent = group_name;
   $('#group_info #nav-mobile #purpose')[0].textContent = group_purpose;
   $('#group_info #nav-mobile #joinleavebtn')[0].remove();
   if(!isMember){
-    $('#group_info #nav-mobile #notifications')[0].style.display = "none";
+    // $('#group_info #nav-mobile #notifications')[0].style.display = "none";
+    $('#group_info #nav-mobile #members')[0].style.display = "none";
     $('#group_info #nav-mobile #messages')[0].style.display = "none";
     $('#group_info #nav-mobile #events')[0].style.display = "none";
     $('#group_info #nav-mobile #settings')[0].style.display = "none";
   }else{
     $('#group_info #nav-mobile')[0].style.display = "flex";
-    $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
-    $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
+    $('#group_info #nav-mobile #members')[0].style.display = "flex";
+    // $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
+    // $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
     $('#group_info #nav-mobile #messages a')[0].setAttribute("onclick", "loadMessages(" + group.uid + ")");
-    $('#group_info #nav-mobile #messages #badge')[0].textContent = group_new_messages;
-    $('#group_info #nav-mobile #events #badge')[0].textContent = group_events;
     $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + group.uid + ")");
   }
   var color = isMember ? "red" : "";
@@ -389,6 +422,7 @@ function joinGroup(group_uid){
         }
       }
   $.ajax(createEvent).done(function (response) {
+    updateGroupInfo(group_uid)
   });
 }
 
@@ -404,15 +438,21 @@ function leaveGroup(group_uid){
         }
       }
   $.ajax(createEvent).done(function (response) {
+    updateGroupInfo(group_uid)
   });
 }
 
 function submitNewEvent(){
   var name = $("#createevent_event_name")[0].value;
+  $("#createevent_event_name")[0].value = "";
   var description = $("#createevent_event_description")[0].value;
+  $("#createevent_event_description")[0].value = "";
   var location = $("#createevent_location")[0].value;
+  $("#createevent_location")[0].value = "";
   var date = $("#createevent_date")[0].value;
-  //var time = $("#createevent_time")[0].value
+  $("#createevent_date")[0].value = "";
+  var time = $("#createevent_time")[0].value;
+  $("#createevent_time")[0].value = "";
   var url = "/eventcreate?event_name=" + name + "&event_description=" + description;
   url += "&event_location=" + location  + "&event_date=" + date + "&group=" + currentGroup;
   console.log(url);
@@ -432,14 +472,21 @@ function submitNewEvent(){
 
 function submitNewGroup(){
   var name = $("#creategroup_group_name")[0].value;
+  $("#creategroup_group_name")[0].value = "";
   var description = $("#creategroup_group_description")[0].value;
+  $("#creategroup_group_description")[0].value = "";
   var department = $("#creategroup_department")[0].value;
+  $("#creategroup_department")[0].value = "";
   var course_id = $("#creategroup_course_id")[0].value;
+  $("#creategroup_course_id")[0].value = "";
   var course_name = $("#creategroup_course_name")[0].value;
+  $("#creategroup_course_name")[0].value = "";
   var professor = $("#creategroup_professor")[0].value;
+  $("#creategroup_professor")[0].value = "";
   var max_size = $("#creategroup_maxsize")[0].value;
-  var isPrivate= $("#creategroup_private")[0].value;
-  //var time = $("#createevent_time")[0].value
+  $("#creategroup_maxsize")[0].value = "";
+  var isPrivate = $("#creategroup_private")[0].checked;
+  $("#creategroup_private")[0].checked = false;
   var url = "/groupcreate?group_name=" + name + "&group_description=" + description;
   url += "&department_name=" + department  + "&courseId=" + course_id + "&course_name=" + course_name;
   url += "&professor=" + professor + "&max_size=" + max_size + "&join_by_request=" + isPrivate;
@@ -584,7 +631,7 @@ function loadPreviousMessages(){
 function loadMoreMessages(){
   var messageListQuery = currentChannel.createMessageListQuery();
 
-  messageListQuery.prev(oldestTimestamp, 5, true, function(messageList, error){
+  messageListQuery.prev(oldestTimestamp, 5, false, function(messageList, error){
       if (error) {
           console.error(error);
           return;
