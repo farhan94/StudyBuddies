@@ -335,7 +335,7 @@ function addMessage(message, knownOwner, atFront){
 
 function addGroup(groups_type, group){
     var group_uid = group.uid;
-    var group_icon_url = group.icon_url;
+    var group_icon_url = "http://library-old.eku.edu/andre/img/group-study-icon.png";
     var group_name = group.name;
     var group_size = group.size;
     var group_purpose = group.purpose;
@@ -344,8 +344,8 @@ function addGroup(groups_type, group){
     group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
     group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
-    // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
-    $('#' + groups_type + ' #nav-mobile #collection').append(group_line);
+//    group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
+    $('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
 }
 
 function addEvent(event_type, event_item){

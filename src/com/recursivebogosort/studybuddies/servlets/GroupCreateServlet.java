@@ -64,7 +64,7 @@ public class GroupCreateServlet extends HttpServlet {
         Boolean joinByRequest = Boolean.getBoolean(req.getParameter("join_by_request"));
 
         //Course Field
-        String courseId = req.getParameter("course_id");
+        String courseId = req.getParameter("courseId");
         String courseName = req.getParameter("course_name");
         String professor = req.getParameter("professor");
         String universityName = universityRef.getValue().getName();
