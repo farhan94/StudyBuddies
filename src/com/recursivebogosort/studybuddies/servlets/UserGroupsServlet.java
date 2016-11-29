@@ -28,7 +28,8 @@ public class UserGroupsServlet extends HttpServlet {
             throws IOException {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
-        StudyBuddiesUser sbu = ofy().load().type(StudyBuddiesUser.class).id(user.getUserId()).getValue();
+        String userID = req.getParameter("userID");
+        StudyBuddiesUser sbu = ofy().load().type(StudyBuddiesUser.class).id(userID).getValue();
         Collection<GroupMember> memberGroups = ofy().load().refs(sbu.getAllGroups()).values();
 
         JSONArray ja = new JSONArray();
