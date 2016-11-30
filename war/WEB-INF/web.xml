@@ -110,6 +110,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			<servlet-name>UserGroupsServlet</servlet-name>
 			<url-pattern>/getallusergroups</url-pattern>
 			</servlet-mapping>
+			
+		<servlet>
+		<servlet-name>GetGroupMembersForGroup</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.GetGroupMembersForGroup</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>GetGroupMembersForGroup</servlet-name>
+			<url-pattern>/membersforgroup</url-pattern>
+			</servlet-mapping>
+			
+			
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->

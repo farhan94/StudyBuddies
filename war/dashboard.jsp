@@ -13,114 +13,470 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Dashboard</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="stylesheets/homestyle.css" />
-</head>
-
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">StudyBuddies</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/settings.jsp">SETTINGS</a></li>
-        <%
+<html>
+  <head>
+      <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="tempindex.css" rel="stylesheet">
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+      <link href="https://rawgit.com/Dogfalo/materialize/master/css/prism.css" rel="stylesheet">
+      <link href="https://rawgit.com/Dogfalo/materialize/master/css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://media.twiliocdn.com/sdk/js/common/v0.1/twilio-common.min.js"></script>
+      <script src="https://media.twiliocdn.com/sdk/rtc/js/ip-messaging/v0.10/twilio-ip-messaging.min.js"></script>
+      <script src="tempjs.js"></script>
+      <script src="SendBird.min.js"></script>
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <title>Study Buddies</title>
+    <link rel='shortcut icon' type='image/x-icon' href='http://www.euiwonkim.com/images/studybuddy.png' />
+     <%
 	    	UserService userService = UserServiceFactory.getUserService();
 	    	User user = userService.getCurrentUser();
 	    	if (user != null) {
 	      		pageContext.setAttribute("user", user);
 		%>
-      <li><a href="<%= userService.createLogoutURL("/homepage.jsp")%>"><span class="glyphicon glyphicon-log-out"></span> LOG OUT</a></li>
+		<%  if (user != null) {
+         	String id = user.getUserId();
+         	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
+         	StudyBuddiesUser sbu = sbuRef.get(); %>
+    <user style="display:none;">
+      <name id="user_name"><% out.println(sbu.getName()); %></name>
+      <uid id="user_uid"><%  out.println(sbu.getId()); %></uid>
+      <email id="user_email"><%  out.println(sbu.getEmail()); %></email>
+      <university id="user_university"><%  out.println(sbu.getUniversity()); %></university>
+      <%} %>
+    </user>
+  </head>
+  <body style="display:flex;flex-direction:row;height:100%;">
+      <ul id="nav-mobile" class="side-nav fixed z-depth-4" style="transform: translateX(0%); width: 20%;z-index:999;">
+          <li><img src="http://www.euiwonkim.com/images/studybuddy.png" style="width: 90%;margin-top: -20%;margin-bottom: -20%;"></img></li>
+          <li class="search">
+              <div class="search-wrapper card">
+                  <input id="search"><i class="material-icons">search</i>
+                  <div class="search-results"></div>
+              </div>
+          </li>
+          <li class="bold"><a onClick="hideAll()" class="waves-effect waves-teal">Home</a></li>
+          <li class="bold"><a class="waves-effect waves-teal" href="#modal1">Create a Group</a></li>
+          <li class="bold"><a onclick="findGroups()" class="waves-effect waves-teal">Find a Group</a></li>
+          <li class="bold"><a onClick="yourGroups()" class="waves-effect waves-teal">Your Groups</a></li>
+          <!-- <li class="no-padding">
+              <ul class="collapsible collapsible-accordion">
+                  <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Favorite Groups</a>
+                      <div class="collapsible-body">
+                          <ul>
+                              <li><a href="#">Fav Group 1</a></li>
+                              <li><span class="new badge">2</span><a href="#">Fav Group 2</a></li>
+                              <li><span class="new badge">8</span><a href="#">Fav Group 3</a></li>
+                          </ul>
+                      </div>
+                  </li>
+              </ul>
+          </li> -->
+          <!-- <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li> -->
+          <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal">Events</a></li>
+          <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li> -->
+          <li class="bold"><a href="/settings.jsp" class="waves-effect waves-teal">Settings</a></li>
+          <li><a href="<%=userService.createLogoutURL("/homepage.jsp")%>" class="waves-effect waves-light btn">Logout</a></li>
       </ul>
+      <div id="global_notification_list" class="global_notification_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li><a onClick="hideElement('global_notification_list')" ><i class="material-icons medium">navigate_before</i> All Notifications</a></li>
+            <ul class="collection">
+              <li class="collection-item"><b>Exam 2 Review</b> in <b>2 hours</b>  at <b>UTC</b> </li>
+              <li class="collection-item">New Event created called <b>Exam 2 Review</b> </li>
+              <li class="collection-item"><b>Project Work Session</b>  in <b>1 week</b>  at <b>TBD</b> </li>
+            </ul>
+        </ul>
+      </div>
+      <div id="global_event_list" class="global_event_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
+            <li><a onClick="hideElement('global_event_list')" ><i class="material-icons medium">navigate_before</i> All Events</a></li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Exam 2 Review</p>
+                  <p><b>Time: </b>November 15th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>3 hours</br>
+                  <b>Location: </b>UTC</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Final Exam Review</p>
+                  <p><b>Time: </b>November 25th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>5 hours</br>
+                  <b>Location: </b>Taco Bell</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+      <div id="background" class="background">
+        <h2>Hi Mark,</h2>
+      </div>
+      <div id="messaging" class="messaging" onscroll="onMessageScroll()">
+        <ul>
+            <li>
+              <div class="card blue-grey lighten-4 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Farhan</span>
+                    <p>Almost there</p>
+                  </div>
+              </div>
+              <div class="card blue-grey lighten-4 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Ryan</span>
+                    <p>We're late too</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card teal lighten-3 message text-right">
+                  <div class="card-content white-text">
+                    <p>here!</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card teal lighten-3 message text-right">
+                  <div class="card-content white-text">
+                    <p>Farhan I don't see you where are you?</p>
+                  </div>
+              </div>
+            </li>
+            <li>
+              <div class="card blue-grey lighten-4 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Farhan</span>
+                    <p>Almost there</p>
+                  </div>
+              </div>
+              <div class="card blue-grey lighten-4 message">
+                  <div class="card-content white-text">
+                    <span class="card-subtitle">Ryan</span>
+                    <p>We're late too</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card teal lighten-3 message text-right">
+                  <div class="card-content white-text">
+                    <p>here!</p>
+                  </div>
+              </div>
+            </li>
+            <li class="message-right">
+              <div class="card teal lighten-3 message text-right">
+                  <div class="card-content white-text">
+                    <p>Farhan I don't see you where are you?</p>
+                  </div>
+              </div>
+            </li>
+        </ul>
+        <div class="buffer" style="margin-top: 8%;"></div>
+        <div id="message_input" class="input-field message_input" style="position: fixed;bottom: 0px;width: 53%;">
+          <i class="material-icons prefix" style="padding-top: .5rem;">textsms</i>
+          <input id="icon_prefix" type="text" style="width:75%">
+          <label for="icon_prefix">Message</label>
+          <a onClick="submitMessage()" class="waves-effect waves-light btn">Submit</a>
+        </div>
+      </div>
+      <div id="your_groups" class="your_groups">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
+            <li class="search" style="position:fixed;">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li>
+              <ul class="collection">
+                <li onClick="showElement('group_info')" class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="circle group_icon">
+                  <div class="study_budy_info">
+                    <span class="title">Your Study Group 1</span>
+                    <p>3 members <br>
+                      Purpose 1
+                    </p>
+                  </div>
+                  <i class="small material-icons" style="align-self: center;">grade</i>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle green group_icon">insert_chart</i>
+                <div class="study_budy_info">
+                  <span class="title">Your Study Group 2</span>
+                  <p>10 Members <br>
+                     Purpose 3
+                  </p>
+                </div>
+                <i class="small material-icons" style="align-self: center;">grade</i>
+              </li>
+              <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                <i class="material-icons circle red group_icon">play_arrow</i>
+                <div class="study_budy_info">
+                  <span class="title">Your Study Group 3</span>
+                  <p>14 Members <br>
+                     Purpose 4
+                  </p>
+                </div>
+                <i class="small material-icons" style="align-self: center;">grade</i>
+              </li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+      <div id="departments" class="departments">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%); z-index:998;">
+            <li class="search">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="bold"><a onClick="loadCourses(null)" class="waves-effect waves-teal">Electrical and Computer Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Chemical Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Math</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Dance</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">Computer Science</a></li>
+        </ul>
+      </div>
+      <div id="courses" class="courses">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:998;">
+            <li class="search">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li class="bold back_option"><a onClick="hideElement('courses')" class="waves-effect waves-teal"> < Switch Departments</a></li>
+            <li class="bold"><a onClick="loadGroups('groups', null)" class="waves-effect waves-teal">EE461L: Software Engineering Lab</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE445L: Embedded Systems Lab</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE316K: Digital Logic</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE302: Introduction to Electrical Engineering</a></li>
+            <li class="bold"><a href="#" class="waves-effect waves-teal">EE464K: Senior Design</a></li>
+        </ul>
+      </div>
+      <div id="groups" class="groups">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
+            <li class="search" style="position:fixed;">
+                <div class="search-wrapper card">
+                    <input id="search"><i class="material-icons">search</i>
+                    <div class="search-results"></div>
+                </div>
+            </li>
+            <li id="course_groups_1">
+              <ul id="collection" class="collection">
+                <li onClick="showElement('group_info')" class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="circle group_icon">
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 1</span>
+                    <p>3 members <br>
+                      Purpose 1
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Leave<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle group_icon">folder</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 2</span>
+                    <p>5 Members <br>
+                       Purpose 2
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle green group_icon">insert_chart</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 3</span>
+                    <p>7 Members <br>
+                       Purpose 3
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+                <li class="collection-item avatar waves-effect waves-teal z-depth-2">
+                  <i class="material-icons circle red group_icon">play_arrow</i>
+                  <div class="study_budy_info">
+                    <span class="title">Study Group 4</span>
+                    <p>4 Members <br>
+                       Purpose 4
+                    </p>
+                  </div>
+                  <a href="#!" class="group_joinORleave">
+                    <p>Join<br>
+                       Group
+                    </p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+      <div id="group_info" class="group_info">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(100%);z-index:999;">
+          <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="group_icon" style="width:80%;height:30%;">
+          <li id="name" class="bold" style="align-self: center;">Study Group 1</li>
+          <li id="purpose" class="bold" style="align-self: center;">Description</li>
+          <li id="members" class="bold"><a onClick="loadMembers()" class="waves-effect waves-teal" style="width: 100%;" href="#modal3">Group Members</a></li>
+          <!-- <li id="notifications"class="bold"><a onClick="loadNotifications('group_notification_list', null)" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li> -->
+          <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal">Messages</a></li>
+          <li id="events"class="bold"><a onClick="loadEvents('group_event_list', null);" class="waves-effect waves-teal">Events</a></li>
+          <li id="create_event"class="bold"><a class="waves-effect waves-teal" href="#modal2">Create Event</a></li>
+          <li id="joinleavebtn"><a class="waves-effect waves-light btn">Join/Leave Group</a></li>
+        </ul>
+      </div>
+      <div id="group_notification_list" class="group_notification_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+            <li><a onClick="hideElement('group_notification_list')" ><i class="material-icons medium">navigate_before</i> Group Notifications</a></li>
+            <ul class="collection">
+              <li class="collection-item"><b>Exam 2 Review</b> in <b>2 hours</b>  at <b>UTC</b> </li>
+              <li class="collection-item">New Event created called <b>Exam 2 Review</b> </li>
+              <li class="collection-item"><b>Project Work Session</b>  in <b>1 week</b>  at <b>TBD</b> </li>
+            </ul>
+        </ul>
+      </div>
+      <div id="group_event_list" class="group_event_list">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(100%);z-index:997;">
+            <li><a onClick="hideElement('group_event_list')" ><i class="material-icons medium">navigate_before</i> Group Events</a></li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Exam 2 Review</p>
+                  <p><b>Time: </b>November 15th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>3 hours</br>
+                  <b>Location: </b>UTC</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+            <li>
+              <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
+                <div class="card-content white-text">
+                  <span class="card-subtitle">Final Exam Review</p>
+                  <p><b>Time: </b>November 25th, 2016 at 3:00 PM</br>
+                  <b>Duration: </b>5 hours</br>
+                  <b>Location: </b>Taco Bell</p>
+                </div>
+                <div class="card-action">
+                 <a href="#">Join</a>
+               </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+      <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <div class="input-field">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input required placeholder="Ex: Awesome Group Name" id="creategroup_group_name" type="text" class="validate">
+          <label for="creategroup_group_name">Group Name</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">subject</i>
+          <input required placeholder="Ex: Study group for Final Exam" id="creategroup_group_description" type="text" class="validate">
+          <label for="creategroup_group_description">Group Description</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Electrical and Computer Engineering" id="creategroup_department" type="text" class="validate">
+          <label for="creategroup_department">Department</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: EE 461L" id="creategroup_course_id" type="text" class="validate">
+          <label for="creategroup_course_id">Course ID</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Software Lab" id="creategroup_course_name" type="text" class="validate">
+          <label for="creategroup_course_name">Course Name</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: Dr. Che" id="creategroup_professor" type="text" class="validate">
+          <label for="creategroup_professor">Professor</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: 5" id="creategroup_maxsize" type="text" class="validate">
+          <label for="creategroup_maxsize">Group Max Size</label>
+        </div>
+        <div class="input-field">
+          <p>
+            <input type="checkbox" id="creategroup_private" />
+            <label for="creategroup_private">Private Group</label>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a onClick="submitNewGroup()" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit Group</a>
+      </div>
     </div>
-  </div>
-</nav>
-
-<body>
-
-<p>
-<form class="form-horizontal" action="/joingroup" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="groupID">Group ID</label>
-							<div class="controls">
-								<input type="text" id="groupID" name="groupID"
-									required="true" placeholder="" class="form-control input-lg">
-								<p class="help-block">JoinGroupByID</p>
-							</div>
-						</div>
-						<div class="controls">
-								<button type="submit" class="btn btn-success">Join
-									Group</button>
-								<a href="/dashboard.jsp" class="btn btn-danger"> Cancel</a>
-							</div>
-</form>
-<form class="form-horizontal" action="/leavegroup" method="POST">
-						<div class="control-group">
-							<label class="control-label" for="groupID">Group ID</label>
-							<div class="controls">
-								<input type="text" id="groupID" name="groupID"
-									required="true" placeholder="" class="form-control input-lg">
-								<p class="help-block">LeaveGroupByID</p>
-							</div>
-						</div>
-						<div class="controls">
-								<button type="submit" class="btn btn-success">Leave
-									Group</button>
-								<a href="/dashboard.jsp" class="btn btn-danger"> Cancel</a>
-							</div>
-</form>
-<a href="/groupcreate.jsp" class="btn btn-danger"> Create Group</a>
-<a href="/eventcreate.jsp" class="btn btn-danger"> Create Event</a>
-<%
-	ObjectifyService.register(StudyBuddiesUser.class);
- 	String id = user.getUserId();
- 	Ref<StudyBuddiesUser> sbuRef = ObjectifyService.ofy().load().type(StudyBuddiesUser.class).id(id);
- 	StudyBuddiesUser sbu = sbuRef.get();
- 	if(sbu != null){
- 		ArrayList<Ref<GroupMember>> g = sbu.getAllGroups();
- 		if(g == null){
- 			out.println("NO GROUPS");
- 		}
- 		else{
- 			Iterator iter = g.iterator();
- 			while(iter.hasNext()){
- 				Ref<GroupMember> gmemberRef = (Ref<GroupMember>)iter.next();
- 				gmemberRef = ObjectifyService.ofy().load().ref(gmemberRef);
- 				GroupMember gmember = gmemberRef.get();
- 				Group grp = gmember.getGroup();
- 				out.println(grp.getGroupName());
- 	 		}
- 			 
- 		}
- 		
- 		ArrayList<Ref<Event>> it = sbu.getEvents();
- 		if(it != null){
- 		Iterator i = it.iterator();
- 		while(i.hasNext()){
-			Ref<Event> one = (Ref<Event>)i.next();
-			one = ObjectifyService.ofy().load().ref(one);
-			Event go = one.get();
-			out.println(go.getEventName());
- 		}
- 		}
- 		
- 		
-	 } }
- 		%> </p>
- 	
-
-</body>
+    <div id="modal2" class="modal">
+      <div class="modal-content">
+        <div class="input-field">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input required placeholder="Ex: Awesome Event Name" id="createevent_event_name" type="text" class="validate">
+          <label for="createevent_event_name">Event Name</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">subject</i>
+          <input placeholder="Ex: Study Session for Final" id="createevent_event_description" type="text" class="validate">
+          <label for="createevent_event_description">Event Description</label>
+        </div>
+        <div class="input-field">
+          <input required placeholder="Ex: UTC 3.110" id="createevent_location" type="text" class="validate">
+          <label for="createevent_location">Location</label>
+        </div>
+        <div class="input-field">
+          <input id="createevent_date" type="date" class="datepicker">
+          <label for="createevent_date">Date</label>
+        </div>
+        <div class="input-field">
+          <input id="createevent_time" type="time" class="timepicker">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a onClick="submitNewEvent()" class="modal-action modal-close waves-effect waves-green btn-flat">Submit Event</a>
+      </div>
+    </div>
+    <div id="modal3" class="modal">
+      <div class="modal-content">
+        <div class="collection-header"><h4>Group Members</h4></div>
+        <ul id="collection" class="collection with-header">
+          <li href="#!" class="collection-item">Name</li>
+          <li href="#!" class="collection-item">Name</li>
+          <li href="#!"class="collection-item">Name</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+      </div>
+    </div>
+  </body>
+  <%} %>
 </html>
+

@@ -34,7 +34,7 @@ $(document).ready(function(){
    User.Uid = $("User uid")[0].outerText;
    User.Email = $("User email")[0].outerText;
    User.University = $("User university")[0].outerText;
-   $('#background h2')[0].textContent = "Hi " + User.Name + ",";
+   $('#background h2')[0].textContent = "Hi " + User.Name + "!";
  }
 
 function hideAll(){
@@ -226,6 +226,7 @@ function loadGroupInfo(group){
         }
     $.ajax(getGroupInfo).done(function (response) {
         updateGroupInfo(response);
+        $('.group_info .multi-level-nav')[0].style.transform = "translateX(0%)"
     });
 }
 
@@ -277,7 +278,7 @@ function loadEvents(event_type, group_uid){
 function loadMembers(){
   console.log("load the members");
   $('#modal3 ul').empty()
-  var url = "";
+  var url = "/membersforgroup?groupID="+currentGroup;
   var getMembers = {
         "async": true,
         "crossDomain": true,
@@ -360,7 +361,7 @@ function addGroup(groups_type, group){
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
     group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
     // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
-    $('#' + groups_type + ' #nav-mobile #course_groups_1 ul').append(group_line);
+    $('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
 }
 
 function addEvent(event_type, event_item){
@@ -401,7 +402,7 @@ function updateGroupInfo(group){
     $('#group_info #nav-mobile #members')[0].style.display = "none";
     $('#group_info #nav-mobile #messages')[0].style.display = "none";
     $('#group_info #nav-mobile #events')[0].style.display = "none";
-    $('#group_info #nav-mobile #settings')[0].style.display = "none";
+    //$('#group_info #nav-mobile #settings')[0].style.display = "none";
   }else{
     $('#group_info #nav-mobile')[0].style.display = "flex";
     $('#group_info #nav-mobile #members')[0].style.display = "flex";
@@ -437,7 +438,7 @@ function joinGroup(group_uid){
         }
       }
   $.ajax(createEvent).done(function (response) {
-    updateGroupInfo(group_uid)
+    loadGroupInfo(group_uid)
   });
 }
 
@@ -453,7 +454,7 @@ function leaveGroup(group_uid){
         }
       }
   $.ajax(createEvent).done(function (response) {
-    updateGroupInfo(group_uid)
+    loadGroupInfo(group_uid)
   });
 }
 
