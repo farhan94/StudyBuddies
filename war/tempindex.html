@@ -35,7 +35,7 @@
           <li class="bold"><a onClick="hideAll()" class="waves-effect waves-teal">Home</a></li>
           <li class="bold"><a class="waves-effect waves-teal" href="#modal1">Create a Group</a></li>
           <li class="bold"><a onclick="findGroups()" class="waves-effect waves-teal">Find a Group</a></li>
-          <li class="bold" onClick="yourGroups()"><a href="#">Your Groups</a></li>
+          <li class="bold"><a onClick="yourGroups()" class="waves-effect waves-teal">Your Groups</a></li>
           <!-- <li class="no-padding">
               <ul class="collapsible collapsible-accordion">
                   <li class="bold"><a class="collapsible-header waves-effect waves-teal"><span class="badge">3</span>Favorite Groups</a>
@@ -51,8 +51,8 @@
           </li> -->
           <!-- <li class="bold"><a onClick="loadNotifications('global_notification_list', null)" class="waves-effect waves-teal"><span class="new badge">4</span>Notifications</a></li> -->
           <li class="bold"><a onClick="loadEvents('global_event_list', null)" class="waves-effect waves-teal">Events</a></li>
-          <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li>
-          <li class="bold"><a href="#" class="waves-effect waves-teal">Settings</a></li> -->
+          <!-- <li class="bold"><a href="#" class="waves-effect waves-teal">Profile</a></li> -->
+          <li class="bold"><a href="/settings" class="waves-effect waves-teal">Settings</a></li>
           <li><a class="waves-effect waves-light btn">Logout</a></li>
       </ul>
       <div id="global_notification_list" class="global_notification_list">
@@ -66,7 +66,7 @@
         </ul>
       </div>
       <div id="global_event_list" class="global_event_list">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
             <li><a onClick="hideElement('global_event_list')" ><i class="material-icons medium">navigate_before</i> All Events</a></li>
             <li>
               <div class="card teal darken-2" style="margin: 5px; line-height:initial;">
@@ -167,7 +167,7 @@
         </div>
       </div>
       <div id="your_groups" class="your_groups">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
             <li class="search" style="position:fixed;">
                 <div class="search-wrapper card">
                     <input id="search"><i class="material-icons">search</i>
@@ -211,7 +211,7 @@
         </ul>
       </div>
       <div id="departments" class="departments">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%); z-index:998;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%); z-index:998;">
             <li class="search">
                 <div class="search-wrapper card">
                     <input id="search"><i class="material-icons">search</i>
@@ -226,7 +226,7 @@
         </ul>
       </div>
       <div id="courses" class="courses">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:998;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:998;">
             <li class="search">
                 <div class="search-wrapper card">
                     <input id="search"><i class="material-icons">search</i>
@@ -242,7 +242,7 @@
         </ul>
       </div>
       <div id="groups" class="groups">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(-100%);z-index:997;">
             <li class="search" style="position:fixed;">
                 <div class="search-wrapper card">
                     <input id="search"><i class="material-icons">search</i>
@@ -312,11 +312,11 @@
         </ul>
       </div>
       <div id="group_info" class="group_info">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:999;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(100%);z-index:999;">
           <img src="http://www.freeiconspng.com/uploads/book-stack-icon--icon-search-engine-16.png" alt="" class="group_icon" style="width:80%;height:30%;">
           <li id="name" class="bold" style="align-self: center;">Study Group 1</li>
-          <li id="purpose" class="bold"style="align-self: center;">Description</li>
-          <li id="members" class="bold"><a onClick="loadMembers()" style="align-self: center;" href="#modal3">Group Members</a></li>
+          <li id="purpose" class="bold" style="align-self: center;">Description</li>
+          <li id="members" class="bold"><a onClick="loadMembers()" class="waves-effect waves-teal" style="width: 100%;" href="#modal3">Group Members</a></li>
           <!-- <li id="notifications"class="bold"><a onClick="loadNotifications('group_notification_list', null)" class="waves-effect waves-teal"><span id="badge" class="new badge">1</span>Notifications</a></li> -->
           <li id="messages"class="bold"><a onClick="loadMessages()" class="waves-effect waves-teal">Messages</a></li>
           <li id="events"class="bold"><a onClick="loadEvents('group_event_list', null);" class="waves-effect waves-teal">Events</a></li>
@@ -335,7 +335,7 @@
         </ul>
       </div>
       <div id="group_event_list" class="group_event_list">
-        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(0%);z-index:997;">
+        <ul id="nav-mobile" class="side-nav multi-level-nav z-depth-4" style="transform: translateX(100%);z-index:997;">
             <li><a onClick="hideElement('group_event_list')" ><i class="material-icons medium">navigate_before</i> Group Events</a></li>
             <li>
               <div class="card teal darken-2" style="margin: 5px; line-height:initial;">

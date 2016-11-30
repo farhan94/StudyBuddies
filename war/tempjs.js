@@ -118,6 +118,7 @@ function loadDepartments(university){
     }
     $('#departments #nav-mobile li').not('li:first').empty()
     showElement('departments');
+    // $('.departments .multi-level-nav')[0].style.transform = "translateX(0%)"
     var getDepartments = {
           "async": true,
           "crossDomain": true,
@@ -136,6 +137,7 @@ function loadDepartments(university){
           dept_line += "class=\'waves-effect waves-teal\'>" + dept_list[dept].department_name + "</a></li>";
           $('#departments #nav-mobile').append(dept_line);
       }
+      $('.departments .multi-level-nav')[0].style.transform = "translateX(0%)"
     });
 }
 
@@ -165,12 +167,20 @@ function loadCourses(department){
         course_line += "class=\'waves-effect waves-teal\'>" + course_list[course].course_name + "</a></li>";
         $('#courses #nav-mobile').append(course_line);
     }
+    $('.courses .multi-level-nav')[0].style.transform = "translateX(0%)"
   });
 }
 
 function loadGroups(groups_type, course){
   var group_list;
-  if(TEST_MODE){ group_list = dummy_group_list; }
+  if(TEST_MODE){
+    showElement(groups_type);
+    group_list = dummy_group_list;
+    for(var group in group_list){
+        addGroup(groups_type, group_list[group]);
+    }
+    return;
+  }
   $('#' + groups_type + ' #nav-mobile li').not('li:first').empty()
   showElement(groups_type);
   var url = (groups_type == "your_groups") ? ("/getusergroups") : ("/getgroupbycourse?courseID=" + course);
@@ -189,6 +199,7 @@ function loadGroups(groups_type, course){
     for(var group in group_list){
         addGroup(groups_type, group_list[group]);
     }
+    $('.'+groups_type+' .multi-level-nav')[0].style.transform = "translateX(0%)"
   });
 }
 
@@ -198,7 +209,11 @@ function loadGroupInfo(group){
   var group
   if(TEST_MODE){
     group = dummy_group;
+    showElement("group_info");
+    updateGroupInfo(group);
+    return;
   }
+  showElement("group_info");
   var getGroupInfo = {
           "async": true,
           "crossDomain": true,
@@ -212,7 +227,6 @@ function loadGroupInfo(group){
     $.ajax(getGroupInfo).done(function (response) {
         updateGroupInfo(response);
     });
-  showElement("group_info");
 }
 
 function loadNotifications(notification_type, uid){
@@ -256,6 +270,7 @@ function loadEvents(event_type, group_uid){
     for(var eventIndex in event_list){
         addEvent(event_type, event_list[eventIndex]);
     }
+    $('.'+event_type+' .multi-level-nav')[0].style.transform = "translateX(0%)"
   });
 }
 
@@ -344,8 +359,8 @@ function addGroup(groups_type, group){
     group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
     group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
-//    group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
-    $('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
+    // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
+    $('#' + groups_type + ' #nav-mobile #course_groups_1 ul').append(group_line);
 }
 
 function addEvent(event_type, event_item){
@@ -485,11 +500,9 @@ function submitNewGroup(){
   $("#creategroup_professor")[0].value = "";
   var max_size = $("#creategroup_maxsize")[0].value;
   $("#creategroup_maxsize")[0].value = "";
-  var isPrivate = $("#creategroup_private")[0].checked;
-  $("#creategroup_private")[0].checked = false;
   var url = "/groupcreate?group_name=" + name + "&group_description=" + description;
   url += "&department_name=" + department  + "&courseId=" + course_id + "&course_name=" + course_name;
-  url += "&professor=" + professor + "&max_size=" + max_size + "&join_by_request=" + isPrivate;
+  url += "&professor=" + professor + "&max_size=" + max_size;
   console.log(url);
   var createEvent = {
         "async": true,
