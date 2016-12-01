@@ -61,7 +61,7 @@ public class GroupCreateServlet extends HttpServlet {
         String groupName = req.getParameter("group_name");
         String groupDescription = req.getParameter("group_description");
         int maxSize = Integer.parseInt(req.getParameter("max_size"));
-        Boolean joinByRequest = Boolean.getBoolean(req.getParameter("join_by_request"));
+     //   Boolean joinByRequest = Boolean.getBoolean(req.getParameter("join_by_request"));
 
         //Course Field
         String courseId = req.getParameter("courseId");
@@ -100,7 +100,7 @@ public class GroupCreateServlet extends HttpServlet {
            // System.out.println(courseRef.getValue().getUniversity().getName());
         }
         
-        Group group = Group.CreateGroup(groupName, groupDescription, maxSize, courseRef.getValue(), joinByRequest, sbu);
+        Group group = Group.CreateGroup(groupName, groupDescription, maxSize, courseRef.getValue(), false, sbu);
 
         resp.sendRedirect("/dashboard.jsp");
 
