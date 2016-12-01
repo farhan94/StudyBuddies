@@ -390,8 +390,9 @@ function addEvent(event_type, event_item){
   var event_name = event_item.name;
   var event_description = event_item.description;
   //var group_icon_url = event_list[group].creator;
-  var event_date = event_item.date;
-  var event_time= event_item.time;
+  var date_time = event_item.date.split("||");
+  var event_date = date_time[0];
+  var event_time= date_time[1];
   var event_location = event_item.location;
   //var group_purpose = event_list[group].duration;
 
@@ -492,7 +493,7 @@ function submitNewEvent(){
   var time = $("#createevent_time")[0].value;
   $("#createevent_time")[0].value = "";
   var url = "/eventcreate?event_name=" + name + "&event_description=" + description;
-  url += "&event_location=" + location  + "&event_date=" + date + "&group=" + currentGroup;
+  url += "&event_location=" + location  + "&event_date=" + date + "||" + time + "&group=" + currentGroup;
   console.log(url);
   var createEvent = {
         "async": true,
