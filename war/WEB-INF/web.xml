@@ -121,6 +121,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 			</servlet-mapping>
 			
 			
+				<servlet>
+		<servlet-name>IsMemberServlet</servlet-name>
+			<servlet-class>com.recursivebogosort.studybuddies.servlets.IsMemberServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+			<servlet-name>IsMemberServlet</servlet-name>
+			<url-pattern>/ismember</url-pattern>
+			</servlet-mapping>	
+			IsMemberServlet
 	<!-- SERVLETS END -->
 
 	<!-- FILTERS -->

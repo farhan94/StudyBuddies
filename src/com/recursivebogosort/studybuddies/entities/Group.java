@@ -37,7 +37,7 @@ public class Group{
 		super();
 		this.groupName = name;
 		this.groupDescription = description;
-		this.currentSize = 0;
+		this.currentSize = 1;
 		this.maxSize = maxSize;
 		this.joinByRequest = joinByRequest;
 		this.events = new ArrayList<Ref<Event>>();
@@ -49,7 +49,7 @@ public class Group{
 		super();
 		this.groupName = name;
 		this.groupDescription = description;
-		this.currentSize = 0;
+		this.currentSize = 1;
 		this.maxSize = maxSize;
 		this.joinByRequest = joinByRequest;
 		//this.events = new ArrayList<Ref<Event>>();
@@ -96,9 +96,14 @@ public class Group{
 				
 			}
 		}
-		if(ownerRef.get().getUser().getId() == sbuRef.get().getId()){
-			return true;
-		}
+		if(ownerRef != null){
+			if(ownerRef.get().getUser().getId() == sbuRef.get().getId()){
+				StudyBuddiesUser sbu2 = ownerRef.get().getUser();
+				sbu2.leaveGroup(this);
+				ofy().save().entity(sbu2).now();
+				ownerRef = null;
+				return true;
+			}}
 		return false;
 	}
 	public Long getId(){ return id;}
@@ -109,6 +114,7 @@ public class Group{
     public void setGroupName(String name) { groupName = name; }
 
     public int getCurrentSize(){ return currentSize; }
+    public void setCurrentSize(int i){  currentSize = i; }
     public int getMaxSize() { return maxSize; }
     public int trySetMaxSize(int size) { return maxSize = currentSize <= size ? size : maxSize; }
 

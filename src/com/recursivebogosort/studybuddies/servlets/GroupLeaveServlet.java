@@ -50,9 +50,15 @@ public void doPost(HttpServletRequest req, HttpServletResponse resp)
 					return;
 				}
 				boolean tf = group.removeSBU(sbuRef);
-				ofy().save().entity(group).now();
+				
 				if (tf == true){
+					group.setCurrentSize(group.getCurrentSize() - 1);
+					ofy().save().entity(group).now();
+//					if(group.getCurrentSize() <= 0){
+//						ofy().delete().entity(group);
+//					}
 					resp.getWriter().print("True");
+					
 				}
 				else{
 					resp.getWriter().print("false");
