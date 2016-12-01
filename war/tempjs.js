@@ -78,7 +78,7 @@ var timestampCheck;
 
 function onMessageScroll(){
   var element = document.getElementById("messaging");
-  if(element.scrollTop == 0){
+  if(element.scrollTop <= 10){
     console.log("Time to scroll")
     var oldHeight = element.scrollHeight;
     if(timestampCheck != oldestTimestamp){
@@ -374,12 +374,13 @@ function addGroup(groups_type, group){
     var group_icon_url = icons[Math.floor((Math.random() * (icons.length - 1)) + 1)];
     var group_name = group.name;
     var group_size = group.size;
+    var group_max = group.max;
     var group_purpose = group.purpose;
     var group_join_leave = group.is_member ? 'Leave' : 'Join';
     var group_line = "<li onClick=\"loadGroupInfo(\'" + group_uid + "\')\" alt class=\'collection-item avatar waves-effect waves-teal z-depth-2\'>";
     group_line += "<img src=\"" + group_icon_url + "\" class=\"circle group_icon\">";
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
-    group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
+    group_line +=  "<p>" + group_size + "/" + group_max + " members <br>" + group_purpose + "</p></div></li>";
     // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
     //$('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
     $('#' + groups_type + ' #nav-mobile ul').append(group_line);
@@ -390,17 +391,21 @@ function addEvent(event_type, event_item){
   var event_name = event_item.name;
   var event_description = event_item.description;
   //var group_icon_url = event_list[group].creator;
-  var date_time = event_item.date.split("||");
-  var event_date = date_time[0];
-  var event_time= date_time[1];
+  if(event_item.date != undefined){
+	  var date_time = event_item.date.split("||");
+	  var event_date = date_time[0];
+	  var event_time= date_time[1];
+	}else{
+		var event_date = "8th December, 2016";
+		var event_time= "All Day";
+	}
   var event_location = event_item.location;
   //var group_purpose = event_list[group].duration;
 
   var event_line = "<li><div class=\"card teal darken-2\" style=\"margin: 5px; line-height:initial;\">";
   event_line += "<div class=\"card-content white-text\"><span class=\"card-subtitle\">";
   event_line += event_name + "</p><p><b>Time: </b>";
-  event_line += event_date + "at" + event_time + "</br><b>Duration: </b>";
-  event_line += "3 hours" + "</br><b>Location: </b>";
+  event_line += event_date + " at " + event_time + "</br><b>Location: </b>";
   event_line += event_location + "</p></div>";
   event_line += "</div></li>"
   //$('#group_event_list #nav-mobile').append(event_line);
@@ -493,7 +498,7 @@ function submitNewEvent(){
   var time = $("#createevent_time")[0].value;
   $("#createevent_time")[0].value = "";
   var url = "/eventcreate?event_name=" + name + "&event_description=" + description;
-  url += "&event_location=" + location  + "&event_date=" + date + "||" + time + "&group=" + currentGroup;
+  url += "&event_location=" + location  + "&date=" + date + "||" + time + "&group=" + currentGroup;
   console.log(url);
   var createEvent = {
         "async": true,

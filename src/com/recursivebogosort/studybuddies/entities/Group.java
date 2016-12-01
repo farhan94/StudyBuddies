@@ -233,6 +233,7 @@ public class Group{
 			jo.put("size", getCurrentSize());
 			jo.put("purpose", getGroupDescription());
 			jo.put("is_member", true);
+			jo.put("max", this.maxSize);
 			jo.put("icon_url","google.com");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
