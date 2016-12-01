@@ -183,7 +183,7 @@ function loadGroups(groups_type, course){
   }
   $('#' + groups_type + ' #nav-mobile li').not('li:first').empty()
   showElement(groups_type);
-  var url = (groups_type == "your_groups") ? ("/getusergroups") : ("/getgroupbycourse?courseID=" + course);
+  var url = (groups_type == "your_groups") ? ("/getusergroups?userID" + User.Uid) : ("/getgroupbycourse?courseID=" + course);
   var getGroups = {
         "async": true,
         "crossDomain": true,
@@ -217,7 +217,7 @@ function loadGroupInfo(group){
   var getGroupInfo = {
           "async": true,
           "crossDomain": true,
-          "url": "/getgroupinfo?groupID=" + group,
+          "url": "/getgroupinfo?groupID=" + group + "&userID=" + User.Uid,
           "method": "GET",
           "headers": {
             "cache-control": "no-cache",
@@ -349,9 +349,11 @@ function addMessage(message, knownOwner, atFront){
   }
 }
 
+var icons = ["http://www.snellvilleumc.org/uploads/Small_Group_Icon.png", "https://www.jigsaw.org/images/Icon_Group.svg", "https://www.mentalhelp.net/content/uploads/2015/08/175x175xEducate-Icon.png.pagespeed.ic.iQQz_PWVp0.png"]
+
 function addGroup(groups_type, group){
     var group_uid = group.uid;
-    var group_icon_url = "http://library-old.eku.edu/andre/img/group-study-icon.png";
+    var group_icon_url = icons[Math.floor((Math.random() * (icons.size() - 1)) + 1)];
     var group_name = group.name;
     var group_size = group.size;
     var group_purpose = group.purpose;
@@ -389,7 +391,7 @@ var currentGroup;
 
 function updateGroupInfo(group){
   currentGroup = group.uid;
-  var group_icon_url = group.icon_url;
+  var group_icon_url = "https://databigandsmalldotcom.files.wordpress.com/2014/01/qualitative_socialmedia_crop1-640x450.jpg";
   var group_name = group.name;
   var isMember = group.is_member;
   var group_purpose = group.purpose;
