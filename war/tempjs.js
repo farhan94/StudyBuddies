@@ -552,7 +552,7 @@ var currentChannel = null;
 
 function connectSendBird(){
   sb = new SendBird({appId: "B3E1CBF0-0C08-42FB-A967-4817AE8FE95A"});
-  connectUser(0000,"Ralf"); //TODO: change to fit user data
+  connectUser(User.Email, User.Name); //TODO: change to fit user data
 }
 
 function connectUser(UserID, NickName){
@@ -566,6 +566,7 @@ function updateUser(NickName, Profile_url){
 }
 
 function findOpenChannel(channel_name){
+	updateUser(User.Name, null);
   var openChannelListQuery = sb.OpenChannel.createOpenChannelListQuery();
   openChannelListQuery.next(function (response, error) {
     if (error) {
