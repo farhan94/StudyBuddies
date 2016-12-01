@@ -91,6 +91,7 @@ public class Group{
 					sbu.leaveGroup(gm.getGroup());
 					ofy().save().entity(sbu).now();
 					i.remove();
+					ofy().delete().entity(gm);
 					return true;
 				}
 				
@@ -101,6 +102,7 @@ public class Group{
 				StudyBuddiesUser sbu2 = ownerRef.get().getUser();
 				sbu2.leaveGroup(this);
 				ofy().save().entity(sbu2).now();
+				ofy().delete().entity(ownerRef.get());
 				ownerRef = null;
 				return true;
 			}}
@@ -118,7 +120,11 @@ public class Group{
     public int getMaxSize() { return maxSize; }
     public int trySetMaxSize(int size) { return maxSize = currentSize <= size ? size : maxSize; }
 
-    public GroupOwner getOwner() { return ownerRef.getValue(); }
+    public GroupOwner getOwner() { if(ownerRef == null){
+    	return null;
+    	}
+    return ownerRef.getValue(); }
+    
     public void setOwner(Key<GroupOwner> groupOwnerKey) { ownerRef = ofy().load().key(groupOwnerKey); }
     
     public ArrayList<Ref<GroupMember>> getMembers() {

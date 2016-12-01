@@ -183,7 +183,7 @@ function loadGroups(groups_type, course){
   }
   $('#' + groups_type + ' #nav-mobile li').not('li:first').empty()
   showElement(groups_type);
-  var url = (groups_type == "your_groups") ? ("/getusergroups?userID" + User.Uid) : ("/getgroupbycourse?courseID=" + course);
+  var url = (groups_type == "your_groups") ? ("/getusergroups?userID=" + User.Uid) : ("/getgroupbycourse?courseID=" + course);
   var getGroups = {
         "async": true,
         "crossDomain": true,
@@ -353,7 +353,7 @@ var icons = ["http://www.snellvilleumc.org/uploads/Small_Group_Icon.png", "https
 
 function addGroup(groups_type, group){
     var group_uid = group.uid;
-    var group_icon_url = icons[Math.floor((Math.random() * (icons.size() - 1)) + 1)];
+    var group_icon_url = icons[Math.floor((Math.random() * (icons.length - 1)) + 1)];
     var group_name = group.name;
     var group_size = group.size;
     var group_purpose = group.purpose;
@@ -363,7 +363,8 @@ function addGroup(groups_type, group){
     group_line +=  "<div class=\"study_budy_info\"><span class=\"title\">" + group_name + "</span>";
     group_line +=  "<p>" + group_size + " members <br>" + group_purpose + "</p></div></li>";
     // group_line +=  "<a href=\"#!\" class=\"group_joinORleave\"><p>" + group_join_leave + "<br> Group </p></a></li>";
-    $('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
+    //$('#' + groups_type + ' #nav-mobile #course_groups_1').append(group_line);
+    $('#' + groups_type + ' #nav-mobile ul').append(group_line);
 }
 
 function addEvent(event_type, event_item){

@@ -211,6 +211,10 @@ public class StudyBuddiesUser {
     	}}
     	return false;
     }
+    
+    public ArrayList<Ref<GroupMember>> getOtherGroups(){
+    	return this.groupsJoined;
+    }
 
 
 

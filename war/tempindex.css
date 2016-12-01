@@ -84,21 +84,21 @@ body{
 .your_groups .multi-level-nav{
   z-index:998;
   width: 30% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
 .departments .multi-level-nav{
   z-index:998;
   width: 25% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
 .courses .multi-level-nav{
   z-index:998;
   width: 25% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
@@ -106,7 +106,7 @@ body{
   z-index:997;
   margin-left: 45% !important;
   width: 30% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
@@ -114,7 +114,7 @@ body{
   z-index:996;
   margin-left: 75% !important;
   width: 25% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
@@ -122,6 +122,7 @@ body{
   z-index:999 !important;
   margin-left: 75% !important;
   width: 25% !important;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
@@ -129,19 +130,20 @@ body{
   z-index:999 !important;
   margin-left: 75% !important;
   width: 25% !important;
-  transition: transform 2s;
+  transition: transform 1s;
   background-color: #eee !important;
 }
 
 .global_notification_list .multi-level-nav{
   z-index:1000 !important;
   margin-left: 0% !important;
+  transition: transform 1s;
 }
 
 .global_event_list .multi-level-nav{
   z-index:1000 !important;
   margin-left: 0% !important;
-  transition: transform 2s;
+  transition: transform 1s;
 }
 
 .collection .collection-item {

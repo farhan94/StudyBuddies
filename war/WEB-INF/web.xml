@@ -108,7 +108,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		</servlet>
 		<servlet-mapping>
 			<servlet-name>UserGroupsServlet</servlet-name>
-			<url-pattern>/getallusergroups</url-pattern>
+			<url-pattern>/getusergroups</url-pattern>
 			</servlet-mapping>
 			
 		<servlet>
