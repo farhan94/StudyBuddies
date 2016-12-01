@@ -73,8 +73,10 @@ public class Group{
 				
 			}
 		}
+		if(ownerRef != null){
 		if(ownerRef.get().getUser().getId() == sbuRef.get().getId()){
 			return true;
+		}
 		}
 		return false;
 	}
@@ -214,9 +216,11 @@ public class Group{
     		sbum.addEvent(eventRef);
     		ofy().save().entity(sbum).now();
     	}
+    	if(ownerRef != null){
     	StudyBuddiesUser sbuo = ownerRef.get().getUser();
     	sbuo.addEvent(eventRef);
     	ofy().save().entity(sbuo).now();
+    	}
     	//iterate through every group member and owner and add the event to their event list
     }
 

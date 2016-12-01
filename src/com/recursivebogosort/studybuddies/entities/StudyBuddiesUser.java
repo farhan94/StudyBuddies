@@ -196,19 +196,37 @@ public class StudyBuddiesUser {
     }
 
     public boolean leaveGroup(Group g){
-    	ArrayList<Ref<GroupMember>> aList = this.getAllGroups();
+    	ArrayList<Ref<GroupMember>> aList = this.getOtherGroups();
     	if(aList != null){
     	Iterator<Ref<GroupMember>> i = aList.iterator();
     	while(i.hasNext()){
     		Ref<GroupMember> gmRef = i.next();
     		gmRef = ofy().load().ref(gmRef);
     		GroupMember gm = gmRef.get();
+    		if(gm != null){
     		if(g.getId() == gm.getGroup().getId()){
     			i.remove();
     			return true;
     		}
+    		}
     		
     	}}
+    	ArrayList<Ref<GroupOwner>> bList = this.getMyGroups();
+    	if(bList != null){
+    		Iterator<Ref<GroupOwner>> it = bList.iterator();
+        	while(it.hasNext()){
+        		Ref<GroupOwner> goRef = it.next();
+        		goRef = ofy().load().ref(goRef);
+        		GroupOwner go = goRef.get();
+        		if(go != null){
+        		if(g.getId() == go.getGroup().getId()){
+        			it.remove();
+        			return true;
+        		}
+        		}
+        		
+        	}
+    	}
     	return false;
     }
     

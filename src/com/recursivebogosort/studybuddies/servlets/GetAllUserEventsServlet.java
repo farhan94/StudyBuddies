@@ -25,28 +25,27 @@ public class GetAllUserEventsServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
+//		UserService userService = UserServiceFactory.getUserService();
+//		User user = userService.getCurrentUser();
+		String userID = req.getParameter("userID");
+		StudyBuddiesUser sbu = ofy().load().type(StudyBuddiesUser.class).id(userID).getValue();
 		// 
-		if (user != null) {
-			String id = user.getUserId();
-			System.out.println(ofy().load().keys().list());
-			Ref<StudyBuddiesUser> sbuRef = ofy().load().type(StudyBuddiesUser.class).id(id);
-			StudyBuddiesUser sbu = sbuRef.get();
+
 			if(sbu != null){
 
 				 JSONArray ar = new JSONArray();
 				 ArrayList<Ref<Event>> events = sbu.getEvents();
 				 for(int i = 0; i < events.size(); i++){
 					 Ref<Event> eventRef = events.get(i);
+					 eventRef = ofy().load().ref(eventRef);
 					 Event ev = eventRef.get();
 					 JSONObject jo = new JSONObject();
 					 try {
-						jo.put("event_uid", ev.getId());
-						jo.put("event_date", ev.getDate());
-						jo.put("event_name", ev.getEventName());
-						jo.put("event_location", ev.getEventLocation());
-						jo.put("event_description", ev.getEventDescription());
+						jo.put("uid", ev.getId());
+						jo.put("date", ev.getDate());
+						jo.put("name", ev.getEventName());
+						jo.put("location", ev.getEventLocation());
+						jo.put("description", ev.getEventDescription());
 
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -65,6 +64,6 @@ public class GetAllUserEventsServlet extends HttpServlet {
 		}
 		
 
-	}
+	
 	
 }

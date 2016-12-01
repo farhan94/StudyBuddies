@@ -50,10 +50,12 @@ public void doPost(HttpServletRequest req, HttpServletResponse resp)
 					//resp.getWriter().print("false");
 					return;
 				}
+				if(group.getCurrentSize() < group.getMaxSize()){
 				if(!group.isJoinByRequest()){
 					GroupMember gm = new GroupMember(sbuRef, groupRef);
 					Key<GroupMember> gmKey = ofy().save().entity(gm).now();
 					group.addMember(gmKey);
+					group.setCurrentSize(group.getCurrentSize() + 1);
 					ofy().save().entity(group).now();
 					sbu.joinGroup(ofy().load().key(gmKey));
 					ofy().save().entity(sbu).now();
@@ -61,6 +63,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse resp)
 				}
 				else{
 					
+				}
 				}
 			
 			}

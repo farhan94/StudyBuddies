@@ -27,8 +27,8 @@ public class UserGroupsServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        UserService userService = UserServiceFactory.getUserService();
-        User user = userService.getCurrentUser();
+        //UserService userService = UserServiceFactory.getUserService();
+        //User user = userService.getCurrentUser();
         String userID = req.getParameter("userID");
         StudyBuddiesUser sbu = ofy().load().type(StudyBuddiesUser.class).id(userID).getValue();
         ArrayList<Ref<GroupMember>> gmrefs = sbu.getOtherGroups();

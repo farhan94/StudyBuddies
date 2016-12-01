@@ -39,7 +39,7 @@ public class GetEventsServlet extends HttpServlet{
 				jo.put("name", evnt.getEventName());
 				jo.put("description", evnt.getEventDescription());
 				jo.put("date", evnt.getDate());
-				jo.put("time", "I dunno");
+				//jo.put("time", "I dunno");
 				jo.put("location",evnt.getEventLocation());
 				
 			} catch (JSONException e) {

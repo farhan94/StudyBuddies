@@ -181,7 +181,7 @@ function loadGroups(groups_type, course){
     }
     return;
   }
-  $('#' + groups_type + ' #nav-mobile li').not('li:first').empty()
+  $('#' + groups_type + ' #nav-mobile ul').empty()
   showElement(groups_type);
   var url = (groups_type == "your_groups") ? ("/getusergroups?userID=" + User.Uid) : ("/getgroupbycourse?courseID=" + course);
   var getGroups = {
@@ -225,10 +225,28 @@ function loadGroupInfo(group){
           }
         }
     $.ajax(getGroupInfo).done(function (response) {
-        updateGroupInfo(response);
+    	loadGroupInfo2(response);
         $('.group_info .multi-level-nav')[0].style.transform = "translateX(0%)"
     });
 }
+
+function loadGroupInfo2(group){
+	  //do some logic to get group information for given uid
+	  var getGroupInfo = {
+	          "async": true,
+	          "crossDomain": true,
+	          "url": "/ismember?groupID=" + group.uid + "&userID=" + User.Uid,
+	          "method": "GET",
+	          "headers": {
+	            "cache-control": "no-cache",
+	            "postman-token": "fb38c742-ab74-18f1-d76d-1f3d4560f8ab"
+	          }
+	        }
+	    $.ajax(getGroupInfo).done(function (response) {
+	        updateGroupInfo(group, response.is_member);
+	    });
+	}
+
 
 function loadNotifications(notification_type, uid){
   var notifications_list;
@@ -252,7 +270,7 @@ function loadEvents(event_type, group_uid){
   if(event_type == "group_event_list"){
     url = "/getevents?groupID=" + group_uid;
   }else{
-    url = "/geteventsforuser";
+    url = "/geteventsforuser?"  + "userID=" + User.Uid;
   }
   showElement(event_type);
   $("#" + event_type + " li").not('li:first').empty()
@@ -382,19 +400,18 @@ function addEvent(event_type, event_item){
   event_line += event_name + "</p><p><b>Time: </b>";
   event_line += event_date + "at" + event_time + "</br><b>Duration: </b>";
   event_line += "3 hours" + "</br><b>Location: </b>";
-  event_line += event_location + "</p></div><div class=\"card-action\"><a onClick=\"\" >";
-  event_line += "Leave" + "</a></div></div></li>"
+  event_line += event_location + "</p></div>";
+  event_line += "</div></li>"
   //$('#group_event_list #nav-mobile').append(event_line);
   $('#' + event_type + ' #nav-mobile').append(event_line);
 }
 
 var currentGroup;
 
-function updateGroupInfo(group){
+function updateGroupInfo(group , isMember){
   currentGroup = group.uid;
   var group_icon_url = "https://databigandsmalldotcom.files.wordpress.com/2014/01/qualitative_socialmedia_crop1-640x450.jpg";
   var group_name = group.name;
-  var isMember = group.is_member;
   var group_purpose = group.purpose;
   $('#group_info #nav-mobile img')[0].src = group_icon_url;
   $('#group_info #nav-mobile #name')[0].textContent = group_name;
@@ -402,17 +419,19 @@ function updateGroupInfo(group){
   $('#group_info #nav-mobile #joinleavebtn')[0].remove();
   if(!isMember){
     // $('#group_info #nav-mobile #notifications')[0].style.display = "none";
-    $('#group_info #nav-mobile #members')[0].style.display = "none";
     $('#group_info #nav-mobile #messages')[0].style.display = "none";
     $('#group_info #nav-mobile #events')[0].style.display = "none";
+    $('#group_info #nav-mobile #create_event')[0].style.display = "none";
     //$('#group_info #nav-mobile #settings')[0].style.display = "none";
   }else{
     $('#group_info #nav-mobile')[0].style.display = "flex";
-    $('#group_info #nav-mobile #members')[0].style.display = "flex";
+    $('#group_info #nav-mobile #messages')[0].style.display = "flex";
+    $('#group_info #nav-mobile #events')[0].style.display = "flex";
     // $('#group_info #nav-mobile #notifications #badge')[0].textContent = group_new_notifications;
     // $('#group_info #nav-mobile #notifications a')[0].setAttribute("onclick", "loadNotifications('group_notification_list', " + group.uid + ")");
     $('#group_info #nav-mobile #messages a')[0].setAttribute("onclick", "loadMessages(" + group.uid + ")");
     $('#group_info #nav-mobile #events a')[0].setAttribute("onclick", "loadEvents('group_event_list', " + group.uid + ")");
+    $('#group_info #nav-mobile #create_event')[0].style.display = "flex";
   }
   var color = isMember ? "red" : "";
   var join_or_leave = isMember ? "Leave" : "Join";
@@ -433,7 +452,7 @@ function joinGroup(group_uid){
   var createEvent = {
         "async": true,
         "crossDomain": true,
-        "url": "/joingroup?groupID=" + group_uid,
+        "url": "/joingroup?groupID=" + group_uid + "&userID=" + User.Uid,
         "method": "POST",
         "headers": {
           "cache-control": "no-cache",
@@ -449,7 +468,7 @@ function leaveGroup(group_uid){
   var createEvent = {
         "async": true,
         "crossDomain": true,
-        "url": "/leavegroup?groupID=" + group_uid,
+        "url": "/leavegroup?groupID=" + group_uid + "&userID=" + User.Uid,
         "method": "POST",
         "headers": {
           "cache-control": "no-cache",
@@ -709,6 +728,11 @@ function testLoadGroups(){
   TEST_MODE = true;
   loadGroups("groups",null);
 }
+
+function testLoadYourGroups(){
+	  TEST_MODE = true;
+	  loadGroups("your_groups",null);
+	}
 
 function testLoadGroupInfo(){
   TEST_MODE = true;
